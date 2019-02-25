@@ -7,7 +7,7 @@ public class GameLoop extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        if (Game.currentScene == null || Game.currentSceneName == "Opening")
+        if (Game.currentScene == null)
             return;
 
         Game.currentScene.draw();

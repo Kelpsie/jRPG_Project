@@ -6,7 +6,9 @@ import javafx.scene.layout.BorderPane;
 import main.Game;
 import models.GameScene;
 
-public class OpeningScene extends GameScene {
+public class OpeningScene {
+
+    public Scene scene;
 
     public OpeningScene() {
         BorderPane root = new BorderPane();
@@ -21,6 +23,7 @@ public class OpeningScene extends GameScene {
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
     }
 
-    @Override
-    public void draw() { }
+    public void start() {
+        Game.stage.setScene(scene);
+    }
 }
