@@ -4,6 +4,9 @@ import javafx.animation.AnimationTimer;
 
 public class GameLoop extends AnimationTimer {
 
+    public static int frameNumber;
+
+    // main loop
 
     @Override
     public void handle(long now) {
@@ -13,3 +16,4 @@ public class GameLoop extends AnimationTimer {
         Game.currentScene.draw();
     }
 }
+

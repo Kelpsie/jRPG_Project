@@ -15,6 +15,7 @@ public class Game extends Application {
     public static final int WIDTH = 640;
     public static final int HEIGHT = 480;
 
+    //store scenes and current scene information
     public static Hashtable<String, GameScene> scenes;
     public static String currentSceneName;
     public static GameScene currentScene;

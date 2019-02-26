@@ -1,0 +1,18 @@
+@font-face {
+    src: url('PressStart2P-Regular.ttf');
+}
+
+.menuButton {
+    -fx-background-image: url("exit.png");
+    -fx-backgorund-color: transparent;
+}
+
+.menuButton:hover {
+    -fx-background-image: url("exit2.png");
+    -fx-backgorund-color: transparent;
+}
+
+.debugInfo {
+    -fx-font-family:  'Press Start 2P', cursive;
+    -fx-font-size: 14px;
+}
