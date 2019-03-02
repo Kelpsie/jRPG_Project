@@ -1,19 +1,20 @@
 package scenes;
 
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import loader.ImageLoader;
 import loader.TextLoader;
 import main.Game;
 import main.GameLoop;
+import models.GameMap;
 import models.GameScene;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
@@ -26,8 +27,12 @@ public class MapScene extends GameScene {
     int tilePosX;
     int tilePosY;
     ArrayList<Image> tiles = new ArrayList<>();
-    Image image;
+    Image mapImage;
     int mapData[][] = new int[32][32];
+
+    GameMap map;
+    int playerX = 0, playerY = 0;
+
     /*int mapData[][] = {{1,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,2,},
             {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16,},
             {16,4,10,10,10,4,10,10,10,4,10,10,10,4,10,10,10,4,4,4,21,21,21,21,4,4,4,4,4,4,4,16,},
@@ -66,7 +71,7 @@ public class MapScene extends GameScene {
     /*
      * RENDER STACK
      *
-     * Main Map Layer -> static image
+     * Main GameMap Layer -> static image
      * Animated Tiles Layer -> tile map
      * Sprites -> tile map
      * Foreground Layer -> static image? (maybe tile map as well, not too sure though, will discuss)
@@ -122,7 +127,7 @@ public class MapScene extends GameScene {
             for(int mapX=0; mapX<mapData.length; mapX++) {
                 if(mapData[mapY][mapX] == 21){
                     int tile = (mapData[mapY][mapX]-1) + tileAnimationCounter;
-                    graphicsContext.drawImage(tiles.get(tile), (tilePosX+x), (tilePosY+y));
+                    graphicsContext.drawImage(tiles.get(tile), ((mapX * tilesize)+x), ((mapY * tilesize)+y));
 
                 }
 
@@ -133,6 +138,7 @@ public class MapScene extends GameScene {
             tilePosX = 0;
             if(tilePosY > mapSize){
                 tilePosY = 0;
+                System.out.println("What?");
             }
 
         }
@@ -160,18 +166,20 @@ public class MapScene extends GameScene {
         root.getChildren().add(canvas);
         graphics = canvas.getGraphicsContext2D();
         ImageLoader.readTileMap("assets/maptilestest.png", tiles, 32);
-        image = ImageLoader.loadImage("file:assets/testmap.png");
+        mapImage = ImageLoader.loadImage("file:assets/testmap.png");
         TextLoader.convertTo2D(TextLoader.readText(), mapData);
 
-        //TODO: Load assets (sprites, world map)
+        try {
+            map = new GameMap("testmap.tmx");
+        } catch (Exception e) { e.printStackTrace();}
+
     }
 
     @Override
     public void draw() {
-        baseLayer(graphics, image, 0, 0);
+        baseLayer(graphics, mapImage, 0, 0);
         //baseLayer(graphics, tiles, 32, 1024, mapData, 0,0);
         animatedLayer(graphics, tiles, 32, 1024, mapData, 0,0);
         GameLoop.frameNumber++;
-        //TODO: Display sprites and current map
     }
 }

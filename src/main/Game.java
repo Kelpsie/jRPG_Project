@@ -34,7 +34,7 @@ public class Game extends Application {
 
         // Make a new instance of every scene in the game
         scenes = new Hashtable<>();
-        scenes.put("Map", new MapScene());
+        scenes.put("GameMap", new MapScene());
         scenes.put("Battle", new BattleScene());
 
         // Go to Opening scene

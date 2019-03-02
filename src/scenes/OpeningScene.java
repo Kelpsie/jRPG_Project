@@ -16,7 +16,7 @@ public class OpeningScene {
         //TODO: Make a proper loading screen, current is a placeholder
         Button test = new Button("Enter Game");
         test.setOnMouseClicked(event -> {
-            Game.setScene("Map");
+            Game.setScene("GameMap");
         });
         root.setCenter(test);
 
