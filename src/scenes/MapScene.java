@@ -31,6 +31,7 @@ public class MapScene extends GameScene {
     int mapData[][] = new int[32][32];
 
     GameMap map;
+    double mapX = 0, mapY = 0;
     int playerX = 0, playerY = 0;
 
     /*int mapData[][] = {{1,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,2,},
@@ -172,6 +173,21 @@ public class MapScene extends GameScene {
         try {
             map = new GameMap("testmap.tmx");
         } catch (Exception e) { e.printStackTrace();}
+
+
+        scene.setOnKeyPressed(event -> {
+            switch(event.getCode()) {
+                case UP: move(0, -1); break;
+                case DOWN: move(0, 1); break;
+                case LEFT: move(-1, 0); break;
+                case RIGHT: move(1, 0); break;
+            }
+        });
+    }
+
+    public void move(int x, int y) {
+        if (map.layers.get("Collision")[map.getIndex(playerX+x, playerY+y)] != 0)
+            return;
 
     }
 

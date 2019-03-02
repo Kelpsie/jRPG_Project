@@ -15,23 +15,19 @@ import java.util.Hashtable;
 
 public class GameMap {
 
-    public int tileWidth, tileHeight;
+    public int tileSize;
     public int width, height;
     public Hashtable<String, int[]> layers = new Hashtable<>();
 
     public GameMap(String filename) throws IOException, ParserConfigurationException, SAXException {
-
-
         File file = new File("assets/" + filename);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(file);
         document.getDocumentElement().normalize();
         Element mapElement = (Element)document.getElementsByTagName("map").item(0);
-
-
-        tileWidth = Integer.parseInt(mapElement.getAttribute("tilewidth"));
-        tileHeight = Integer.parseInt(mapElement.getAttribute("tileheight"));
+        
+        tileSize = Integer.parseInt(mapElement.getAttribute("tilewidth"));
         width = Integer.parseInt(mapElement.getAttribute("width"));
         height = Integer.parseInt(mapElement.getAttribute("height"));
 
