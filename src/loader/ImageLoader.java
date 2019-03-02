@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ImageLoader {
+
     public static BufferedImage BufferedImageLoader(String imagePath){
         BufferedImage bufferedImage = null;
         try {
@@ -20,20 +21,31 @@ public class ImageLoader {
         return bufferedImage;
     }
 
-    public static ArrayList<BufferedImage> readTileMap(String sourceMap, ArrayList<BufferedImage> tilemaps, int resolution , Boolean isScaled){
+    public static Image loadImage(String imagePath){
+
+        Image image = new Image(imagePath);
+
+        return image;
+    }
+
+    //rewrite to do conversion within method
+
+    public static ArrayList<Image> readTileMap(String sourceMap, ArrayList<Image> tilemaps, int resolution){
         BufferedImage bufferedTileMap = ImageLoader.BufferedImageLoader(sourceMap);
         for (int y = 0; y < bufferedTileMap.getHeight(); y+=resolution) {
             System.out.println("readTileMap(): y= " + y);
             for (int x = 0; x < bufferedTileMap.getWidth(); x+=resolution){
                 System.out.println("readTileMap(): x= " + x);
                 BufferedImage individualTileMap = bufferedTileMap.getSubimage(x, y, resolution, resolution);
-                tilemaps.add(individualTileMap);
+                Image image = SwingFXUtils.toFXImage(individualTileMap, null);
+                tilemaps.add(image);
             }
         }
 
         return tilemaps;
     }
 
+    // depreciated, will keep for now
     public static ArrayList<Image> convertBufferedImageArrayToWritableImageArray(ArrayList<BufferedImage> scaledImages, ArrayList<Image> finalImageArray){
 
         for(BufferedImage scaledImage: scaledImages){

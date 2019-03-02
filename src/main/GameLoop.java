@@ -5,7 +5,7 @@ import javafx.animation.AnimationTimer;
 public class GameLoop extends AnimationTimer {
 
     public static int frameNumber;
-
+    int drawCall = 0;
     // main loop
 
     @Override
@@ -13,6 +13,9 @@ public class GameLoop extends AnimationTimer {
         if (Game.currentScene == null)
             return;
 
+        if((drawCall++) %100 == 0) {
+            System.out.println(System.nanoTime() - now);
+        }
         Game.currentScene.draw();
     }
 }

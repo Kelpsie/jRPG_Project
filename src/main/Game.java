@@ -12,8 +12,8 @@ import java.util.Hashtable;
 public class Game extends Application {
 
     public static Stage stage;
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 480;
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 720;
 
     //store scenes and current scene information
     public static Hashtable<String, GameScene> scenes;
