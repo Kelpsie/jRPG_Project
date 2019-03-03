@@ -12,4 +12,6 @@ public abstract class GameScene {
 
     public Scene getScene() { return scene; }
     public abstract void draw();
+
+    public abstract void update(double delta);
 }

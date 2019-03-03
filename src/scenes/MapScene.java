@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import loader.ImageLoader;
 import loader.TextLoader;
 import main.Game;
@@ -19,20 +20,23 @@ import java.util.ArrayList;
 
 
 public class MapScene extends GameScene {
-    //TODO: Add map switching
+
+    ArrayList<KeyCode> keys = new ArrayList<>();
 
     Canvas canvas;
     GraphicsContext graphics;
+    Color background = Color.rgb(33, 33, 33, 1);
+
     int tileAnimationCounter;
-    int tilePosX;
-    int tilePosY;
     ArrayList<Image> tiles = new ArrayList<>();
     Image mapImage;
     int mapData[][] = new int[32][32];
 
     GameMap map;
-    double mapX = 0, mapY = 0;
-    int playerX = 0, playerY = 0;
+    int mapX = 0, mapY = 0;
+    final int PLAYERSTARTX = 20, PLAYERSTARTY = 12;
+    int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
+    int mapDirX = 0, mapDirY = 0;
 
     /*int mapData[][] = {{1,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,2,},
             {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16,},
@@ -89,29 +93,9 @@ public class MapScene extends GameScene {
         graphicsContext.drawImage(baseLayer, x, y);
     }
 
-    private void baseLayer(GraphicsContext graphicsContext, ArrayList<Image> tiles, int tilesize, int mapSize, int[][] mapData, int x, int y){
-
-        tilePosX = 0;
-        tilePosY = 0;
-        for(int mapY=0; mapY<mapData.length; mapY++) {
-            for(int mapX=0; mapX<mapData.length; mapX++) {
-                graphicsContext.drawImage(tiles.get((mapData[mapY][mapX])-1), (tilePosX+x), (tilePosY+y));
-                tilePosX += tilesize;
-            }
-            tilePosY += tilesize;
-            tilePosX = 0;
-            if(tilePosY > mapSize){
-                tilePosY = 0;
-            }
-
-        }
-
-    }
-
-
     // this should be re written to work with single dimension array
 
-    private void animatedLayer(GraphicsContext graphicsContext, ArrayList<Image> tiles, int tilesize, int mapSize, int[][] mapData, int x, int y){
+    private void animatedLayer(GraphicsContext graphicsContext, ArrayList<Image> tiles, int tilesize, int mapSize, int x, int y){
         if(GameLoop.frameNumber > 30) {
             GameLoop.frameNumber = 0;
             tileAnimationCounter++;
@@ -122,26 +106,16 @@ public class MapScene extends GameScene {
 
         // reset position per call
 
-        tilePosY = 0;
-        tilePosX = 0;
         for(int mapY=0; mapY<mapData.length; mapY++) {
             for(int mapX=0; mapX<mapData.length; mapX++) {
-                if(mapData[mapY][mapX] == 21){
-                    int tile = (mapData[mapY][mapX]-1) + tileAnimationCounter;
-                    graphicsContext.drawImage(tiles.get(tile), ((mapX * tilesize)+x), ((mapY * tilesize)+y));
+                int tile = map.tileAt("Main Map", mapX, mapY);
+                if (tile == 21) {
+                    //Why is this -1 necessary?
+                    int toDraw = (tile - 1) + tileAnimationCounter;
+                    graphicsContext.drawImage(tiles.get(toDraw), ((mapX * tilesize)+x), ((mapY * tilesize)+y));
 
                 }
-
-                tilePosX += tilesize;
             }
-
-            tilePosY += tilesize;
-            tilePosX = 0;
-            if(tilePosY > mapSize){
-                tilePosY = 0;
-                System.out.println("What?");
-            }
-
         }
 
     }
@@ -168,34 +142,68 @@ public class MapScene extends GameScene {
         graphics = canvas.getGraphicsContext2D();
         ImageLoader.readTileMap("assets/maptilestest.png", tiles, 32);
         mapImage = ImageLoader.loadImage("file:assets/testmap.png");
-        TextLoader.convertTo2D(TextLoader.readText(), mapData);
+
 
         try {
             map = new GameMap("testmap.tmx");
         } catch (Exception e) { e.printStackTrace();}
 
-
         scene.setOnKeyPressed(event -> {
-            switch(event.getCode()) {
-                case UP: move(0, -1); break;
-                case DOWN: move(0, 1); break;
-                case LEFT: move(-1, 0); break;
-                case RIGHT: move(1, 0); break;
-            }
+            if (!keys.contains(event.getCode()))
+                keys.add(event.getCode());
+        });
+        scene.setOnKeyReleased(event -> {
+            if (keys.contains(event.getCode()))
+                keys.remove(event.getCode());
         });
     }
 
-    public void move(int x, int y) {
-        if (map.layers.get("Collision")[map.getIndex(playerX+x, playerY+y)] != 0)
-            return;
+    @Override
+    public void update(double delta) {
+
+
+        if (mapDirX != 0 || mapDirY != 0) {
+            mapX += (mapDirX);
+            mapY += (mapDirY);
+
+            // If we've moved the width/height of one tile, stop moving
+            if (mapX % map.tileSize == 0 && mapY % map.tileSize == 0) {
+                mapDirX = 0; mapDirY = 0;
+            }
+        }
+        if (mapDirX == 0 && mapDirY == 0) {
+            if (keys.contains(KeyCode.UP))          mapDirY = 1;
+            else if (keys.contains(KeyCode.DOWN))   mapDirY = -1;
+            else if (keys.contains(KeyCode.LEFT))   mapDirX = 1;
+            else if (keys.contains(KeyCode.RIGHT))  mapDirX = -1;
+
+            // If player would collide with the map, stop moving
+            // Subtract here instead of add because the map moves left as the player moves right, etc
+            if (map.collidable(playerX - mapDirX, playerY - mapDirY)) {
+                mapDirX = 0; mapDirY = 0;
+            } else {
+                playerX -= mapDirX; playerY -= mapDirY;
+            }
+        }
 
     }
 
     @Override
     public void draw() {
-        baseLayer(graphics, mapImage, 0, 0);
+        // Clear screen
+        graphics.setFill(background);
+        graphics.fillRect(0, 0, scene.getWidth(), scene.getHeight());
+
+
+        baseLayer(graphics, mapImage, mapX, mapY);
         //baseLayer(graphics, tiles, 32, 1024, mapData, 0,0);
-        animatedLayer(graphics, tiles, 32, 1024, mapData, 0,0);
+        animatedLayer(graphics, tiles, 32, 1024, mapX,mapY);
+
+        // Simple player sprite
+        graphics.setFill(Color.PAPAYAWHIP);
+        graphics.fillRect(PLAYERSTARTX * map.tileSize+2, PLAYERSTARTY * map.tileSize+2, 28, 28 );
+
+
         GameLoop.frameNumber++;
     }
 }

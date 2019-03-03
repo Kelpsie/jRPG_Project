@@ -26,7 +26,7 @@ public class GameMap {
         Document document = builder.parse(file);
         document.getDocumentElement().normalize();
         Element mapElement = (Element)document.getElementsByTagName("map").item(0);
-        
+
         tileSize = Integer.parseInt(mapElement.getAttribute("tilewidth"));
         width = Integer.parseInt(mapElement.getAttribute("width"));
         height = Integer.parseInt(mapElement.getAttribute("height"));
@@ -46,9 +46,17 @@ public class GameMap {
 
     }
 
+    public int tileAt(String layer, int x, int y) {
+        return layers.get(layer)[getIndex(x, y)];
+    }
+
     public int getIndex(int x, int y) {
         if (x > width - 1 || x < 0)  return -1;
         if (y > height - 1 || y < 0) return -1;
         return y*width + x;
+    }
+
+    public boolean collidable(int x, int y) {
+        return layers.get("Collision")[getIndex(x, y)] != 0;
     }
 }

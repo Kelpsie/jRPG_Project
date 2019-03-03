@@ -8,4 +8,9 @@ public class BattleScene extends GameScene {
     public void draw() {
 
     }
+
+    @Override
+    public void update(double delta) {
+
+    }
 }

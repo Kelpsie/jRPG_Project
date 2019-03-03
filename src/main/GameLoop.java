@@ -6,6 +6,7 @@ public class GameLoop extends AnimationTimer {
 
     public static int frameNumber;
     int drawCall = 0;
+    long time;
     // main loop
 
     @Override
@@ -16,7 +17,11 @@ public class GameLoop extends AnimationTimer {
         if((drawCall++) %100 == 0) {
             System.out.println(System.nanoTime() - now);
         }
+
+        Game.currentScene.update(time - now);
         Game.currentScene.draw();
+
+        time = System.nanoTime();
     }
 }
 
