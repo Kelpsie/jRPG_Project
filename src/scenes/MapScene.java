@@ -13,6 +13,7 @@ import loader.ImageLoader;
 import loader.TextLoader;
 import main.Game;
 import main.GameLoop;
+import models.Character;
 import models.GameMap;
 import models.GameScene;
 
@@ -23,9 +24,11 @@ public class MapScene extends GameScene {
 
     ArrayList<KeyCode> keys = new ArrayList<>();
 
+    Character player;
+
     Canvas canvas;
     GraphicsContext graphics;
-    Color background = Color.rgb(33, 33, 33, 1);
+    //Color background = Color.rgb(33, 33, 33, 1);
 
     int tileAnimationCounter;
     ArrayList<Image> tiles = new ArrayList<>();
@@ -38,41 +41,7 @@ public class MapScene extends GameScene {
     int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
 
-    /*int mapData[][] = {{1,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,2,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16,},
-            {16,4,10,10,10,4,10,10,10,4,10,10,10,4,10,10,10,4,4,4,21,21,21,21,4,4,4,4,4,4,4,16,},
-            {16,4,4,10,4,4,10,4,4,4,10,4,4,4,4,10,4,4,4,4,21,21,21,21,4,4,4,4,4,4,4,16,},
-            {16,4,4,10,21,21,10,10,4,4,10,10,10,4,4,10,4,4,4,4,21,21,21,21,4,4,4,4,4,4,4,16,},
-            {16,4,4,10,21,21,10,4,4,4,4,4,10,4,4,10,4,4,4,4,21,21,21,21,4,4,4,4,4,4,4,16,},
-            {16,4,4,10,4,4,10,10,10,4,10,10,10,4,4,10,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,16,},
-            {16,4,10,10,10,4,10,10,4,4,4,4,4,4,4,4,4,4,4,4,4,4,21,21,4,4,4,4,4,4,4,16,},
-            {16,4,10,4,10,4,4,10,4,4,4,4,4,4,4,4,4,4,4,4,4,4,21,21,4,4,4,4,4,4,4,16,},
-            {16,4,10,4,10,4,4,10,4,4,4,4,21,21,21,21,4,4,4,4,4,4,4,4,4,4,4,21,21,21,4,16,},
-            {16,4,10,4,10,4,4,10,4,4,4,4,21,4,4,21,4,4,4,4,4,4,4,4,4,4,4,21,21,21,4,16,},
-            {16,4,10,10,10,4,10,10,10,4,4,4,21,4,4,21,4,4,4,4,4,4,4,4,4,4,4,21,21,21,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,21,21,21,21,4,4,4,4,5,5,4,4,4,4,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,4,4,4,12,4,12,4,12,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,10,10,4,4,4,4,12,4,12,4,12,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,11,11,4,4,4,12,4,12,4,12,4,16,},
-            {16,4,4,4,4,4,4,4,4,21,4,4,21,4,4,4,5,4,4,4,4,4,4,4,4,5,12,4,12,4,12,16,},
-            {16,4,4,4,4,4,5,4,4,4,21,21,4,4,4,4,6,4,4,4,4,4,4,4,4,6,4,12,4,12,4,16,},
-            {16,4,4,4,4,4,6,4,4,4,21,21,4,4,4,4,10,4,4,4,4,4,4,4,4,10,12,4,12,4,12,16,},
-            {16,4,4,4,4,4,10,4,4,21,4,4,21,4,4,4,11,4,4,4,5,5,4,4,4,11,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,11,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,4,4,4,4,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,10,10,4,4,4,4,4,17,17,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,11,11,4,4,4,4,4,18,18,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,4,4,4,4,4,4,4,4,5,4,19,19,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,4,8,8,4,4,4,4,4,6,4,20,20,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,5,4,4,4,4,4,10,4,8,8,4,4,4,4,4,10,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,6,4,4,4,4,4,11,4,4,4,8,8,4,4,4,11,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,10,4,4,4,4,4,4,4,4,4,8,8,4,4,4,4,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,11,4,4,4,4,4,4,4,4,4,4,4,8,8,4,4,4,4,4,4,4,16,},
-            {16,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,8,8,4,4,4,4,4,4,4,16,},
-            {9,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,3}};*/
 
-
-    //public static Image baseMap = ImageLoader.loadImage("file:assets/testmap.png");
     /*
      * RENDER STACK
      *
@@ -96,7 +65,7 @@ public class MapScene extends GameScene {
     // this should be re written to work with single dimension array
 
     private void animatedLayer(GraphicsContext graphicsContext, ArrayList<Image> tiles, int tilesize, int mapSize, int x, int y){
-        if(GameLoop.frameNumber > 30) {
+        if(GameLoop.frameNumber > 15) {
             GameLoop.frameNumber = 0;
             tileAnimationCounter++;
             if (tileAnimationCounter > 2) {
@@ -133,6 +102,10 @@ public class MapScene extends GameScene {
     }
 
 
+    /**
+     * CONSTRUCTOR
+     */
+
     public MapScene() {
         Pane root = new Pane();
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
@@ -140,6 +113,7 @@ public class MapScene extends GameScene {
         canvas = new Canvas(Game.WIDTH, Game.HEIGHT);
         root.getChildren().add(canvas);
         graphics = canvas.getGraphicsContext2D();
+        player = new Character(graphics, 0);
         ImageLoader.readTileMap("assets/maptilestest.png", tiles, 32);
         mapImage = ImageLoader.loadImage("file:assets/testmap.png");
 
@@ -166,6 +140,7 @@ public class MapScene extends GameScene {
             mapX += (mapDirX);
             mapY += (mapDirY);
 
+
             // If we've moved the width/height of one tile, stop moving
             if (mapX % map.tileSize == 0 && mapY % map.tileSize == 0) {
                 mapDirX = 0; mapDirY = 0;
@@ -177,21 +152,23 @@ public class MapScene extends GameScene {
             else if (keys.contains(KeyCode.LEFT))   mapDirX = 1;
             else if (keys.contains(KeyCode.RIGHT))  mapDirX = -1;
 
+
+
             // If player would collide with the map, stop moving
             // Subtract here instead of add because the map moves left as the player moves right, etc
             if (map.collidable(playerX - mapDirX, playerY - mapDirY)) {
                 mapDirX = 0; mapDirY = 0;
             } else {
                 playerX -= mapDirX; playerY -= mapDirY;
+
             }
         }
-
     }
 
     @Override
     public void draw() {
         // Clear screen
-        graphics.setFill(background);
+        //graphics.setFill(background);
         graphics.fillRect(0, 0, scene.getWidth(), scene.getHeight());
 
 
@@ -201,9 +178,18 @@ public class MapScene extends GameScene {
 
         // Simple player sprite
         graphics.setFill(Color.PAPAYAWHIP);
-        graphics.fillRect(PLAYERSTARTX * map.tileSize+2, PLAYERSTARTY * map.tileSize+2, 28, 28 );
+        player.drawPlayer((PLAYERSTARTX * map.tileSize+2), (PLAYERSTARTY * map.tileSize+2));
+        //graphics.fillRect(PLAYERSTARTX * map.tileSize+2, PLAYERSTARTY * map.tileSize+2, 28, 28 );
 
 
         GameLoop.frameNumber++;
+        if(Math.abs(mapDirX) == 1 || Math.abs(mapDirY) == 1){
+            Character.charFrameNumber++;
+        } else {
+            if (Character.animationCounter > 0){
+                Character.animationCounter = 0;
+            }
+        }
+        //System.out.println(Character.charFrameNumber);
     }
 }

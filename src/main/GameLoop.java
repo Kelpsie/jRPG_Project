@@ -15,7 +15,7 @@ public class GameLoop extends AnimationTimer {
             return;
 
         if((drawCall++) %100 == 0) {
-            System.out.println(System.nanoTime() - now);
+            //System.out.println(System.nanoTime() - now);
         }
 
         Game.currentScene.update(time - now);
