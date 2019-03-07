@@ -16,26 +16,17 @@ public class ImageLoader {
         try {
             bufferedImage = ImageIO.read( new File(imagePath));
         } catch(IOException error){
-            System.out.println(error);
+            error.printStackTrace(); // <- better way to display error
         }
         return bufferedImage;
     }
 
-    public static Image loadImage(String imagePath){
-
-        Image image = new Image(imagePath);
-
-        return image;
-    }
-
-    //rewrite to do conversion within method
+    public static Image loadImage(String imagePath){ return new Image(imagePath); }
 
     public static ArrayList<Image> readTileMap(String sourceMap, ArrayList<Image> tilemaps, int resolution){
         BufferedImage bufferedTileMap = ImageLoader.BufferedImageLoader(sourceMap);
         for (int y = 0; y < bufferedTileMap.getHeight(); y+=resolution) {
-            System.out.println("readTileMap(): y= " + y);
             for (int x = 0; x < bufferedTileMap.getWidth(); x+=resolution){
-                System.out.println("readTileMap(): x= " + x);
                 BufferedImage individualTileMap = bufferedTileMap.getSubimage(x, y, resolution, resolution);
                 Image image = SwingFXUtils.toFXImage(individualTileMap, null);
                 tilemaps.add(image);
@@ -45,7 +36,7 @@ public class ImageLoader {
         return tilemaps;
     }
 
-    // depreciated, will keep for now
+    // deprecated, will keep for now
     public static ArrayList<Image> convertBufferedImageArrayToWritableImageArray(ArrayList<BufferedImage> scaledImages, ArrayList<Image> finalImageArray){
 
         for(BufferedImage scaledImage: scaledImages){

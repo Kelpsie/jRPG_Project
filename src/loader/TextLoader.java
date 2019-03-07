@@ -8,11 +8,11 @@ import java.util.Scanner;
 public class TextLoader {
 
     private static File file = new File("assets/mapData.txt");
+    public static Scanner scanner = null;
 
     public static String readText(){
 
         String string = "";
-        Scanner scanner = null;
         try {
             scanner = new Scanner(file);
         } catch (FileNotFoundException e) {

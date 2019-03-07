@@ -33,11 +33,10 @@ public class MapScene extends GameScene {
     int tileAnimationCounter;
     ArrayList<Image> tiles = new ArrayList<>();
     Image mapImage;
-    int mapData[][] = new int[32][32];
 
     GameMap map;
     int mapX = 0, mapY = 0;
-    final int PLAYERSTARTX = 20, PLAYERSTARTY = 12;
+    final int PLAYERSTARTX = 19, PLAYERSTARTY = 12;
     int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
 
@@ -52,7 +51,6 @@ public class MapScene extends GameScene {
      * Lighting Layer -> layer with alpha
      *
      * TODO :
-     * need to calculate fixed x y position of player sprite (need to know what resolution we are going to be using)
      * code cleanup
      */
 
@@ -61,8 +59,6 @@ public class MapScene extends GameScene {
     private void baseLayer(GraphicsContext graphicsContext, Image baseLayer, int x, int y){
         graphicsContext.drawImage(baseLayer, x, y);
     }
-
-    // this should be re written to work with single dimension array
 
     private void animatedLayer(GraphicsContext graphicsContext, ArrayList<Image> tiles, int tilesize, int mapSize, int x, int y){
         if(GameLoop.frameNumber > 15) {
@@ -75,9 +71,9 @@ public class MapScene extends GameScene {
 
         // reset position per call
 
-        for(int mapY=0; mapY<mapData.length; mapY++) {
-            for(int mapX=0; mapX<mapData.length; mapX++) {
-                int tile = map.tileAt("Main Map", mapX, mapY);
+        for(int mapY=0; mapY<map.height; mapY++) {
+            for(int mapX=0; mapX<map.width; mapX++) {
+                int tile = map.tileAt("Main Map", mapX, mapY); // <- change this to use a diff layer
                 if (tile == 21) {
                     //Why is this -1 necessary?
                     int toDraw = (tile - 1) + tileAnimationCounter;
@@ -137,8 +133,8 @@ public class MapScene extends GameScene {
 
 
         if (mapDirX != 0 || mapDirY != 0) {
-            mapX += (mapDirX);
-            mapY += (mapDirY);
+            mapX += (mapDirX * 2);
+            mapY += (mapDirY * 2);
 
 
             // If we've moved the width/height of one tile, stop moving
@@ -168,18 +164,13 @@ public class MapScene extends GameScene {
     @Override
     public void draw() {
         // Clear screen
-        //graphics.setFill(background);
         graphics.fillRect(0, 0, scene.getWidth(), scene.getHeight());
 
-
         baseLayer(graphics, mapImage, mapX, mapY);
-        //baseLayer(graphics, tiles, 32, 1024, mapData, 0,0);
         animatedLayer(graphics, tiles, 32, 1024, mapX,mapY);
 
         // Simple player sprite
-        graphics.setFill(Color.PAPAYAWHIP);
-        player.drawPlayer((PLAYERSTARTX * map.tileSize+2), (PLAYERSTARTY * map.tileSize+2));
-        //graphics.fillRect(PLAYERSTARTX * map.tileSize+2, PLAYERSTARTY * map.tileSize+2, 28, 28 );
+        player.drawPlayer((PLAYERSTARTX * map.tileSize), (PLAYERSTARTY * map.tileSize));
 
 
         GameLoop.frameNumber++;
