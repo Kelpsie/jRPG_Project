@@ -1,0 +1,37 @@
+#root {
+    -fx-background-color: #111111;
+}
+
+.text {
+    -fx-padding: 20px;
+    -fx-text-fill: #dddddd;
+    -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
+    -fx-font-size: 36px;
+}
+
+#rect_1 {
+    -fx-fill: rgba(0,0,0,0);
+    -fx-stroke: #dddddd;
+    -fx-stroke-width: 3px;
+}
+
+#rect_2 {
+    -fx-fill: rgba(0,0,0,0);
+    -fx-stroke: #dddddd;
+    -fx-stroke-width: 2px;
+}
+
+#buttons {
+    -fx-alignment: CENTER-RIGHT;
+    -fx-spacing: 10px;
+}
+
+.button {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-text-fill: #dddddd;
+}
+
+.button:hover {
+    -fx-text-fill: #aaaaaa;
+}
