@@ -150,7 +150,7 @@ public class MapScene extends GameScene {
                 keys.add(event.getCode());
             //TODO: Remove temporary notification test code
             if (event.getCode() == KeyCode.PERIOD)
-                notificationQueue.push("Player X: " + playerX);
+                notificationQueue.add("Player X: " + playerX);
         });
         scene.setOnKeyReleased(event -> {
             if (keys.contains(event.getCode()))
