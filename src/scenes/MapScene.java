@@ -37,9 +37,11 @@ public class MapScene extends GameScene {
 
     int tileAnimationCounter;
     int mapX = 0, mapY = 0;
-    final int PLAYERSTARTX = 19, PLAYERSTARTY = 12;
+    final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
     int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
+
+
 
     /*
      * RENDER STACK
@@ -79,10 +81,14 @@ public class MapScene extends GameScene {
                 }
             }
         }
-
     }
 
-    /* removed these methods as we do not need them*/
+    private int[] screenToMap(int x, int y) {
+        return new int[]{(x - mapX)/map.tileSize, (y - mapY)/map.tileSize};
+    }
+    private int[] mapToScreen(int x, int y) {
+        return new int[]{(x*map.tileSize + mapX), (y*map.tileSize + mapY)};
+    }
 
     private void addNotification(String s) {
         Label nLabel = new Label(s);
@@ -135,6 +141,10 @@ public class MapScene extends GameScene {
             map = new GameMap("testmap.tmx");
         } catch (Exception e) { e.printStackTrace();}
 
+        int[] mapPos = mapToScreen(PLAYERSTARTX, PLAYERSTARTY);
+        mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
+        mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];
+
 
         notificationQueue = new LinkedList<>();
         notificationLabels = new LinkedList<>();
@@ -156,7 +166,14 @@ public class MapScene extends GameScene {
             if (keys.contains(event.getCode()))
                 keys.remove(event.getCode());
         });
+        scene.setOnMouseClicked(event -> {
+            int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
+            notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
+        });
     }
+
+
+
 
     @Override
     public void update(double delta) {
@@ -198,7 +215,7 @@ public class MapScene extends GameScene {
 
         baseLayer(graphics, mapImage, mapX, mapY);
         animatedLayer(graphics, tiles, 32, 1024, mapX,mapY);
-        player.drawPlayer((PLAYERSTARTX * map.tileSize), (PLAYERSTARTY * map.tileSize));
+        player.drawPlayer(((Game.WIDTH / 2)/map.tileSize)*map.tileSize, ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize);
 
         GameLoop.frameNumber++;
         if(Math.abs(mapDirX) == 1 || Math.abs(mapDirY) == 1){

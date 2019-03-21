@@ -1,6 +1,7 @@
 package main;
 
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import models.GameScene;
 import scenes.BattleScene;
@@ -12,8 +13,8 @@ import java.util.Hashtable;
 public class Game extends Application {
 
     public static Stage stage;
-    public static final int WIDTH = 1280;
-    public static final int HEIGHT = 720;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
 
     //store scenes and current scene information
     public static Hashtable<String, GameScene> scenes;
@@ -25,6 +26,8 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Font.loadFont(getClass().getResourceAsStream("/styles/VT220-mod.ttf"), 16);
+
         stage = primaryStage;
         stage.setTitle("The Name Of Our Game, I Guess");
 

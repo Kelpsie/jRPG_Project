@@ -59,4 +59,5 @@ public class GameMap {
     public boolean collidable(int x, int y) {
         return layers.get("Collision")[getIndex(x, y)] != 0;
     }
+
 }
