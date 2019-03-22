@@ -1,10 +1,11 @@
 
 .notification {
-    -fx-label-padding: 5px;
+    -fx-label-padding: 2px 8px;
     -fx-text-fill: #ffffff;
     -fx-font-family: "VT220-mod";
     -fx-font-weight: bold;
     -fx-font-size: 28px;
+    -fx-background-color: rgba(60, 60, 60, 0.6);
 }
 .notification .text {
     -fx-stroke: none;

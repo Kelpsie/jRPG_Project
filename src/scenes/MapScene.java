@@ -14,6 +14,7 @@ import loader.ImageLoader;
 import main.Game;
 import main.GameLoop;
 import models.Character;
+import models.Enemy;
 import models.GameMap;
 import models.GameScene;
 import java.util.ArrayList;
@@ -36,11 +37,13 @@ public class MapScene extends GameScene {
     Image mapImage;
 
     int tileAnimationCounter;
-    int mapX = 0, mapY = 0;
+    int mapX, mapY;
     final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
     int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
 
+
+    Enemy testEnemy;
 
 
     /*
@@ -158,9 +161,6 @@ public class MapScene extends GameScene {
         scene.setOnKeyPressed(event -> {
             if (!keys.contains(event.getCode()))
                 keys.add(event.getCode());
-            //TODO: Remove temporary notification test code
-            if (event.getCode() == KeyCode.PERIOD)
-                notificationQueue.add("Player X: " + playerX);
         });
         scene.setOnKeyReleased(event -> {
             if (keys.contains(event.getCode()))
@@ -170,6 +170,9 @@ public class MapScene extends GameScene {
             int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
             notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
         });
+
+        testEnemy = new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 10, 15);
+
     }
 
 
@@ -225,5 +228,8 @@ public class MapScene extends GameScene {
                 Character.animationCounter = 0;
             }
         }
+
+        int[] pos = mapToScreen(testEnemy.posX, testEnemy.posY);
+        testEnemy.draw(pos[0], pos[1]);
     }
 }

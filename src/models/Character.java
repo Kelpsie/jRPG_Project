@@ -53,7 +53,7 @@ public class Character {
         if (charFrameNumber > 10){
             charFrameNumber = 0;
             animationCounter++;
-            if (animationCounter > 3){
+            if (animationCounter >= animations.size()){
                 animationCounter = 0;
             }
         }
