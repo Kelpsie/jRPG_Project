@@ -1,5 +1,6 @@
 package main;
 
+import audio.AudioHandler;
 import javafx.application.Application;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -26,6 +27,7 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        AudioHandler.initAudiohandler();
         Font.loadFont(getClass().getResourceAsStream("/styles/VT220-mod.ttf"), 16);
 
         stage = primaryStage;

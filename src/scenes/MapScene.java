@@ -1,5 +1,6 @@
 package scenes;
 
+import audio.AudioHandler;
 import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -128,6 +129,7 @@ public class MapScene extends GameScene {
      */
 
     public MapScene() {
+
         root = new StackPane();
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
         scene.getStylesheets().add("styles/map.css");

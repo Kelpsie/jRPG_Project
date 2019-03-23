@@ -1,5 +1,6 @@
 package scenes;
 
+import audio.AudioHandler;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -11,15 +12,18 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.Bloom;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import loader.GetFilePath;
 import main.Game;
 import models.GameScene;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class OpeningScene {
@@ -28,12 +32,17 @@ public class OpeningScene {
     BorderPane root;
     Button test;
     Group player;
+    double volume = 1;
 
     final int MAX_SHAPES = 80;
     int shapes = 1;
     Random rand = new Random();
+    MediaPlayer mp0;
+    MediaPlayer mp1;
 
     public OpeningScene() {
+
+
         root = new BorderPane();
         root.setId("root");
 
@@ -86,13 +95,45 @@ public class OpeningScene {
 
 
         VBox buttons = new VBox();
+        VBox settingsBox = new VBox();
         buttons.setId("buttons");
         root.setCenter(buttons);
         buttons.setMaxWidth(Game.WIDTH / 4);
+        settingsBox.setMaxWidth(Game.WIDTH / 4);
+
+        Label volLabel = new Label("Volume 100%");
+
+
+        Button volPlus = new Button("+");
+        volPlus.setOnMouseClicked(volUp -> {
+            volume += 0.1;
+            volLabel.setText("Volume " + (Math.round(volume*100)) + "%");
+            AudioHandler.setVolume(volume);
+            AudioHandler.playAudio(1);
+        });
+
+        Button volMinus = new Button("-");
+        volMinus.setOnMouseClicked(volDown -> {
+            volume -= 0.1;
+            volLabel.setText("Volume " + (Math.round(volume*100)) + "%");
+            AudioHandler.setVolume(volume);
+            AudioHandler.playAudio(1);
+        });
+
+        Button back = new Button("back");
+        back.setOnMouseClicked(backEvent -> {
+            buttons.setVisible(true);
+            title.setVisible(true);
+            members.setVisible(true);
+            settingsBox.setVisible(false);
+            root.setCenter(buttons);
+        });
+
 
 
         test = new Button("Enter Game");
         test.setOnMouseClicked(event -> {
+            AudioHandler.stopAudio(0);
             Game.setScene("GameMap");
         });
         test.setOnMouseEntered(new ButtonHover(test));
@@ -100,9 +141,25 @@ public class OpeningScene {
         Button b2 = new Button("Load Game");
         b2.setOnMouseEntered(new ButtonHover(b2));
 
-        Button b3 = new Button("Options?");
+        Button b3 = new Button("Settings");
         b3.setOnMouseEntered(new ButtonHover(b3));
+        b3.setOnMouseClicked(settings ->{
+            AudioHandler.playAudio(1);
+            buttons.setVisible(false);
+            title.setVisible(false);
+            members.setVisible(false);
+            settingsBox.setVisible(true);
+            volLabel.setVisible(true);
+            volMinus.setVisible(true);
+            volPlus.setVisible(true);
+            root.setCenter(settingsBox);
+        });
 
+
+
+
+
+        settingsBox.getChildren().addAll(volLabel, volPlus, volMinus, back);
         buttons.getChildren().addAll(test, b2, b3);
 
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
@@ -138,6 +195,9 @@ public class OpeningScene {
             movePath.getElements().add(new LineTo(x, y));
             movePlayer.setPath(movePath);
             movePlayer.play();
+            AudioHandler.playAudio(1);
+
+
         }
     }
 
@@ -240,10 +300,14 @@ public class OpeningScene {
 
         parallelTransition.play();
 
+
+
     }
 
     public void start() {
+        AudioHandler.playAudio(0);
         Game.stage.setScene(scene);
+
 
     }
 }
