@@ -19,6 +19,7 @@ import models.GameMap;
 import models.GameScene;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 
 public class MapScene extends GameScene {
@@ -33,16 +34,17 @@ public class MapScene extends GameScene {
     GraphicsContext graphics;
 
     Character player;
-    GameMap map;
+    public static GameMap map;
     Image mapImage;
 
     int tileAnimationCounter;
-    int mapX, mapY;
+    public static int mapX, mapY;
     final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
     int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
 
 
+    ArrayList<Enemy> enemies;
     Enemy testEnemy;
 
 
@@ -55,8 +57,6 @@ public class MapScene extends GameScene {
      * Foreground Layer -> static image
      * Lighting Layer -> layer with alpha
      *
-     * TODO :
-     * code cleanup
      */
 
     private void baseLayer(GraphicsContext graphicsContext, Image baseLayer, int x, int y){
@@ -86,10 +86,10 @@ public class MapScene extends GameScene {
         }
     }
 
-    private int[] screenToMap(int x, int y) {
+    public static int[] screenToMap(int x, int y) {
         return new int[]{(x - mapX)/map.tileSize, (y - mapY)/map.tileSize};
     }
-    private int[] mapToScreen(int x, int y) {
+    public static int[] mapToScreen(int x, int y) {
         return new int[]{(x*map.tileSize + mapX), (y*map.tileSize + mapY)};
     }
 
@@ -166,12 +166,28 @@ public class MapScene extends GameScene {
             if (keys.contains(event.getCode()))
                 keys.remove(event.getCode());
         });
+
+        //TODO: Click code is all test stuff
         scene.setOnMouseClicked(event -> {
             int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
             notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
+            for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
         });
 
-        testEnemy = new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 10, 15);
+
+        //TODO: Remove enemy test code
+        enemies = new ArrayList<>();
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 22, 6));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 9));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 18, 15));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 11));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 16, 5));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 14, 9));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 13, 20));
+        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 26, 17));
+
+        for (Enemy e: enemies)
+            e.move(new Random().nextInt(4));
 
     }
 
@@ -181,6 +197,15 @@ public class MapScene extends GameScene {
     @Override
     public void update(double delta) {
 
+        // playerTurn is false if any Enemy has work to do next frame
+        boolean playerTurn = true;
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).update()) {
+                playerTurn = false;
+                break;
+            }
+            playerTurn = true;
+        }
 
         if (mapDirX != 0 || mapDirY != 0) {
             mapX += (mapDirX * 2);
@@ -192,7 +217,7 @@ public class MapScene extends GameScene {
                 mapDirX = 0; mapDirY = 0;
             }
         }
-        if (mapDirX == 0 && mapDirY == 0) {
+        if (mapDirX == 0 && mapDirY == 0 && playerTurn) {
             if (keys.contains(KeyCode.UP))          mapDirY = 1;
             else if (keys.contains(KeyCode.DOWN))   mapDirY = -1;
             else if (keys.contains(KeyCode.LEFT))   mapDirX = 1;
@@ -229,7 +254,8 @@ public class MapScene extends GameScene {
             }
         }
 
-        int[] pos = mapToScreen(testEnemy.posX, testEnemy.posY);
-        testEnemy.draw(pos[0], pos[1]);
+        for (Enemy enemy : enemies) {
+            enemy.draw();
+        }
     }
 }
