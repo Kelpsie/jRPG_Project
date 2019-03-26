@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c16c199-824e-4a25-aae3-dd9fc54ccf73" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/jRPG_Project/audio/AudioHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/jRPG_Project/audio/AudioHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/audio/AudioHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/loader/GetFilePath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/loader/GetFilePath.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scenes/OpeningScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/OpeningScene.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -65,8 +60,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/audio/AudioHandler.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="416">
-                  <caret line="41" column="4" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="4" />
+                <state relative-caret-position="378">
+                  <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
                   <folding>
                     <element signature="e#1705#1706#0" expanded="true" />
                     <element signature="e#1732#1733#0" expanded="true" />
@@ -195,7 +190,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1615" />
@@ -259,7 +254,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553620900036" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553621102378" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Audio" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Project" />
@@ -345,7 +340,7 @@
       <workItem from="1553220739302" duration="495000" />
       <workItem from="1553355787820" duration="16906000" />
       <workItem from="1553516664141" duration="444000" />
-      <workItem from="1553613327445" duration="5064000" />
+      <workItem from="1553613327445" duration="5266000" />
     </task>
     <task id="LOCAL-00001" summary="Added XML map parsing">
       <created>1551568872990</created>
@@ -365,7 +360,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78036000" />
+    <option name="totallyTimeSpent" value="78238000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1819" height="1218" extended-state="6" />
@@ -547,8 +542,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/audio/AudioHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="41" column="4" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="4" />
+        <state relative-caret-position="378">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
           <folding>
             <element signature="e#1705#1706#0" expanded="true" />
             <element signature="e#1732#1733#0" expanded="true" />

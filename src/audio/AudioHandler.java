@@ -39,7 +39,7 @@ public abstract class AudioHandler {
         Game.bgAudio = new MediaPlayer(new Media(new File("assets/audio/" + name).toURI().toString()));
         Game.bgAudio.play();
     }
-    
+
     public static void stopAudio(String name){
         try {
             audioList.get(name).stop();
@@ -55,8 +55,8 @@ public abstract class AudioHandler {
 
 
     public static void setVolume(double level){
-        for(AudioClip mp : audioList.values()){
-            mp.setVolume(level);
+        for(AudioClip ac : audioList.values()){
+            ac.setVolume(level);
         }
         Game.bgAudio.setVolume(level);
 
@@ -72,9 +72,9 @@ public abstract class AudioHandler {
         GetFilePath.getFilePaths("assets/audio/", audioFiles, audioNames);
         for(int id = 0; id < audioFiles.size(); id++){
             Path audioPath = Paths.get(audioFiles.get(id));
-            AudioClip mp = new AudioClip(audioPath.toUri().toString());
-            audioPlayer.add(mp);
-            audioList.put(audioNames.get(id), mp);
+            AudioClip ac = new AudioClip(audioPath.toUri().toString());
+            audioPlayer.add(ac);
+            audioList.put(audioNames.get(id), ac);
         }
     }
 
