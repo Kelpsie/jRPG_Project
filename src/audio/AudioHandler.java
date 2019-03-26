@@ -24,6 +24,8 @@ public abstract class AudioHandler {
     public static ArrayList<AudioClip> audioPlayer = new ArrayList<>();
     public static HashMap<String, AudioClip> audioList = new HashMap();
 
+    public static double volume = 1.0;
+
 
     public static void playAudio(String name){
         try {
@@ -54,11 +56,26 @@ public abstract class AudioHandler {
     }
 
 
-    public static void setVolume(double level){
-        for(AudioClip ac : audioList.values()){
-            ac.setVolume(level);
+    public static void increaseVolumeLevel(){
+        if (volume < 1.0){
+            volume += 0.1;
+            setVolume();
         }
-        Game.bgAudio.setVolume(level);
+    }
+
+    public static void decreaseVolumeLevel(){
+        if(volume > 0){
+            volume -= 0.1;
+            setVolume();
+        }
+    }
+
+    public static void setVolume(){
+        for(AudioClip ac : audioList.values()){
+            ac.setVolume(volume);
+        }
+        Game.bgAudio.setVolume(volume);
+
 
     }
 

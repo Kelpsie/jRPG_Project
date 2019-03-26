@@ -32,7 +32,6 @@ public class OpeningScene {
     BorderPane root;
     Button test;
     Group player;
-    double volume = 1;
 
     final int MAX_SHAPES = 80;
     int shapes = 1;
@@ -101,22 +100,20 @@ public class OpeningScene {
         buttons.setMaxWidth(Game.WIDTH / 4);
         settingsBox.setMaxWidth(Game.WIDTH / 4);
 
-        Label volLabel = new Label("Volume 100%");
+        Label volLabel = new Label("Volume" + AudioHandler.volume + "%" );
 
 
         Button volPlus = new Button("+");
         volPlus.setOnMouseClicked(volUp -> {
-            volume += 0.1;
-            volLabel.setText("Volume " + (Math.round(volume*100)) + "%");
-            AudioHandler.setVolume(volume);
+            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
+            AudioHandler.increaseVolumeLevel();
             AudioHandler.playAudio("menuhit.wav");
         });
 
         Button volMinus = new Button("-");
         volMinus.setOnMouseClicked(volDown -> {
-            volume -= 0.1;
-            volLabel.setText("Volume " + (Math.round(volume*100)) + "%");
-            AudioHandler.setVolume(volume);
+            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
+            AudioHandler.decreaseVolumeLevel();
             AudioHandler.playAudio("menuhit.wav");
         });
 
