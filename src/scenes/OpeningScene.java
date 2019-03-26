@@ -109,7 +109,7 @@ public class OpeningScene {
             volume += 0.1;
             volLabel.setText("Volume " + (Math.round(volume*100)) + "%");
             AudioHandler.setVolume(volume);
-            AudioHandler.playAudio(1);
+            AudioHandler.playAudio("menuhit.wav");
         });
 
         Button volMinus = new Button("-");
@@ -117,7 +117,7 @@ public class OpeningScene {
             volume -= 0.1;
             volLabel.setText("Volume " + (Math.round(volume*100)) + "%");
             AudioHandler.setVolume(volume);
-            AudioHandler.playAudio(1);
+            AudioHandler.playAudio("menuhit.wav");
         });
 
         Button back = new Button("back");
@@ -133,7 +133,7 @@ public class OpeningScene {
 
         test = new Button("Enter Game");
         test.setOnMouseClicked(event -> {
-            AudioHandler.stopAudio(0);
+            AudioHandler.stopBackgroundAudio();
             Game.setScene("GameMap");
         });
         test.setOnMouseEntered(new ButtonHover(test));
@@ -144,7 +144,7 @@ public class OpeningScene {
         Button b3 = new Button("Settings");
         b3.setOnMouseEntered(new ButtonHover(b3));
         b3.setOnMouseClicked(settings ->{
-            AudioHandler.playAudio(1);
+            AudioHandler.playAudio("menuhit.wav");
             buttons.setVisible(false);
             title.setVisible(false);
             members.setVisible(false);
@@ -195,7 +195,7 @@ public class OpeningScene {
             movePath.getElements().add(new LineTo(x, y));
             movePlayer.setPath(movePath);
             movePlayer.play();
-            AudioHandler.playAudio(1);
+            AudioHandler.playAudio("menuhit.wav");
 
 
         }
@@ -305,7 +305,7 @@ public class OpeningScene {
     }
 
     public void start() {
-        AudioHandler.playAudio(0);
+        AudioHandler.playBackgroundAudio("accessdenied.wav");
         Game.stage.setScene(scene);
 
 

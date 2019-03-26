@@ -2,6 +2,7 @@ package main;
 
 import audio.AudioHandler;
 import javafx.application.Application;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import models.GameScene;
@@ -18,6 +19,7 @@ public class Game extends Application {
     public static final int HEIGHT = 600;
 
     //store scenes and current scene information
+    public static MediaPlayer bgAudio;
     public static Hashtable<String, GameScene> scenes;
     public static String currentSceneName;
     public static GameScene currentScene;

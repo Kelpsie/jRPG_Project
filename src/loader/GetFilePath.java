@@ -9,14 +9,15 @@ public class GetFilePath {
     public static File file;
 
 
-    public static void getFilePaths(String parentDirectory, ArrayList<String> fileList) {
+    public static void getFilePaths(String parentDirectory, ArrayList<String> fileList, ArrayList<String> nameList ) {
         file = new File(parentDirectory);
         if(file.isDirectory()){
             files = new File(parentDirectory).listFiles();
             if(files != null) {
-                for(File file: files){
+                for(File file: files) {
                     String fileName = "assets/audio/";
                     fileName += file.getName();
+                    nameList.add(file.getName());
                     System.out.println(fileName);
                     fileList.add(fileName);
                 }
