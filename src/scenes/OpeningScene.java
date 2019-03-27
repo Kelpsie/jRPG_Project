@@ -100,20 +100,20 @@ public class OpeningScene {
         buttons.setMaxWidth(Game.WIDTH / 4);
         settingsBox.setMaxWidth(Game.WIDTH / 4);
 
-        Label volLabel = new Label("Volume" + AudioHandler.volume + "%" );
+        Label volLabel = new Label("Volume " + (Math.round((AudioHandler.volume*100)) + "%" ));
 
 
         Button volPlus = new Button("+");
         volPlus.setOnMouseClicked(volUp -> {
-            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
             AudioHandler.increaseVolumeLevel();
+            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
             AudioHandler.playAudio("menuhit.wav");
         });
 
         Button volMinus = new Button("-");
         volMinus.setOnMouseClicked(volDown -> {
-            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
             AudioHandler.decreaseVolumeLevel();
+            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
             AudioHandler.playAudio("menuhit.wav");
         });
 

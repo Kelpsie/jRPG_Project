@@ -14,6 +14,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -59,13 +60,17 @@ public abstract class AudioHandler {
     public static void increaseVolumeLevel(){
         if (volume < 1.0){
             volume += 0.1;
+            volume = Math.round(volume * 100);
+            volume = volume / 100;
             setVolume();
         }
     }
 
     public static void decreaseVolumeLevel(){
-        if(volume > 0){
+        if(volume > 0.0){
             volume -= 0.1;
+            volume = Math.round(volume * 100);
+            volume = volume / 100;
             setVolume();
         }
     }
