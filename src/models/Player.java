@@ -5,21 +5,22 @@ import javafx.scene.image.Image;
 import loader.ImageLoader;
 import java.util.ArrayList;
 
-public class Character {
+public class Player {
 
 
     private int id;
-    private int posX;
-    private int posY;
+    public int posX, posY;
     private GraphicsContext graphicsContext;
     private static ArrayList<Image> animations = new ArrayList<>();
     public static int animationCounter = 0;
     public static int charFrameNumber = 0;
+    public int hp = 100;
 
 
-    public Character(GraphicsContext graphicsContext, int id){
+    public Player(GraphicsContext graphicsContext, int id, int x, int y){
         this.id = id;
         this.graphicsContext = graphicsContext;
+        this.posX = x; this.posY = y;
         ImageLoader.readTileMap("assets/MainChar.png", animations, 32);
     }
 
@@ -27,28 +28,12 @@ public class Character {
         return id;
     }
 
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
 
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-
-    public void drawPlayer(int x, int y){
+    public void draw(int x, int y){
 
         if (charFrameNumber > 10){
             charFrameNumber = 0;

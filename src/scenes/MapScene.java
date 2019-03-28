@@ -1,6 +1,6 @@
 package scenes;
 
-import audio.AudioHandler;
+import enemies.SquareEnemy;
 import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,7 +14,7 @@ import javafx.util.Duration;
 import loader.ImageLoader;
 import main.Game;
 import main.GameLoop;
-import models.Character;
+import models.Player;
 import models.Enemy;
 import models.GameMap;
 import models.GameScene;
@@ -28,13 +28,13 @@ public class MapScene extends GameScene {
     ArrayList<KeyCode> keys = new ArrayList<>();
     ArrayList<Image> tiles = new ArrayList<>();
     LinkedList<Label> notificationLabels;
-    LinkedList<String> notificationQueue;
+    public static LinkedList<String> notificationQueue;
 
     StackPane root;
     Canvas canvas;
     GraphicsContext graphics;
 
-    Character player;
+    public static Player player;
     public static GameMap map;
     Image mapImage;
 
@@ -43,10 +43,10 @@ public class MapScene extends GameScene {
     final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
     int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
+    boolean playerTurn = true;
 
 
     ArrayList<Enemy> enemies;
-    Enemy testEnemy;
 
 
     /*
@@ -85,6 +85,10 @@ public class MapScene extends GameScene {
                 }
             }
         }
+    }
+
+    public static int distance(int x1, int y1, int x2, int y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 
     public static int[] screenToMap(int x, int y) {
@@ -137,7 +141,7 @@ public class MapScene extends GameScene {
         canvas = new Canvas(Game.WIDTH, Game.HEIGHT);
         root.getChildren().add(canvas);
         graphics = canvas.getGraphicsContext2D();
-        player = new Character(graphics, 0);
+        player = new Player(graphics, 0, PLAYERSTARTX, PLAYERSTARTY);
 
         ImageLoader.readTileMap("assets/maptilestest.png", tiles, 32);
         mapImage = ImageLoader.loadImage("file:assets/testmap.png");
@@ -179,14 +183,14 @@ public class MapScene extends GameScene {
 
         //TODO: Remove enemy test code
         enemies = new ArrayList<>();
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 22, 6));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 9));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 18, 15));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 11));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 16, 5));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 14, 9));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 13, 20));
-        enemies.add(new Enemy(graphics, "assets/Enemy_1.png", 32, 10, 26, 17));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 22, 6, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 9, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 18, 15, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 11, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 16, 5, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 14, 9, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 13, 20, 0));
+        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 26, 17, 0));
 
         for (Enemy e: enemies)
             e.move(new Random().nextInt(4));
@@ -199,14 +203,23 @@ public class MapScene extends GameScene {
     @Override
     public void update(double delta) {
 
+        // playerTurn is set to false when the player has done an action
         // playerTurn is false if any Enemy has work to do next frame
-        boolean playerTurn = true;
-        for (int i = 0; i < enemies.size(); i++) {
-            if (enemies.get(i).update()) {
-                playerTurn = false;
-                break;
+        if (!playerTurn) {
+            for (int i = 0; i < enemies.size(); i++) {
+                Enemy curEnemy = enemies.get(i);
+                if (!curEnemy.canAct) {
+                    playerTurn = true;
+                    continue;
+                }
+                if (curEnemy.update()) {
+                    playerTurn = false;
+                    break;
+                } else {
+                    curEnemy.canAct = false;
+                }
+                playerTurn = true;
             }
-            playerTurn = true;
         }
 
         if (mapDirX != 0 || mapDirY != 0) {
@@ -216,7 +229,11 @@ public class MapScene extends GameScene {
 
             // If we've moved the width/height of one tile, stop moving
             if (mapX % map.tileSize == 0 && mapY % map.tileSize == 0) {
+                player.posX -= mapDirX; player.posY -= mapDirY;
                 mapDirX = 0; mapDirY = 0;
+                playerTurn = false;
+                for (Enemy e : enemies) e.canAct = true;
+                System.out.println("\n\n");
             }
         }
         if (mapDirX == 0 && mapDirY == 0 && playerTurn) {
@@ -229,11 +246,8 @@ public class MapScene extends GameScene {
 
             // If player would collide with the map, stop moving
             // Subtract here instead of add because the map moves left as the player moves right, etc
-            if (map.collidable(playerX - mapDirX, playerY - mapDirY)) {
+            if (map.collidable(player.posX - mapDirX, player.posY - mapDirY)) {
                 mapDirX = 0; mapDirY = 0;
-            } else {
-                playerX -= mapDirX; playerY -= mapDirY;
-
             }
         }
     }
@@ -245,14 +259,14 @@ public class MapScene extends GameScene {
 
         baseLayer(graphics, mapImage, mapX, mapY);
         animatedLayer(graphics, tiles, 32, 1024, mapX,mapY);
-        player.drawPlayer(((Game.WIDTH / 2)/map.tileSize)*map.tileSize, ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize);
+        player.draw(((Game.WIDTH / 2)/map.tileSize)*map.tileSize, ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize);
 
         GameLoop.frameNumber++;
         if(Math.abs(mapDirX) == 1 || Math.abs(mapDirY) == 1){
-            Character.charFrameNumber++;
+            Player.charFrameNumber++;
         } else {
-            if (Character.animationCounter > 0){
-                Character.animationCounter = 0;
+            if (Player.animationCounter > 0){
+                Player.animationCounter = 0;
             }
         }
 

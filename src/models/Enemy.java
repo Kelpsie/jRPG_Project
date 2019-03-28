@@ -16,6 +16,7 @@ public class Enemy {
     private int framesSkipped = 0;
     private int currentFrame = 0;
     private int direction = -1;
+    public boolean canAct = false;
 
 
     public Enemy(GraphicsContext graphicsContext, String file, int frameSize, int framesToSkip, int x, int y) {
