@@ -18,6 +18,8 @@ import models.Player;
 import models.Enemy;
 import models.GameMap;
 import models.GameScene;
+import skills.RangedAttack;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -46,7 +48,7 @@ public class MapScene extends GameScene {
     boolean playerTurn = true;
 
 
-    ArrayList<Enemy> enemies;
+    static ArrayList<Enemy> enemies;
 
 
     /*
@@ -98,6 +100,23 @@ public class MapScene extends GameScene {
         return new int[]{(x*map.tileSize + mapX), (y*map.tileSize + mapY)};
     }
 
+    public static Enemy enemyAt(int x, int y) {
+        for (Enemy e: enemies) {
+            if (e.posX == x && e.posY == y)
+                return e;
+        }
+        return null;
+    }
+
+    private static void pruneEnemies() {
+        ArrayList<Enemy> toKill = new ArrayList<>();
+        for (Enemy e: enemies) {
+            if (e.hp <= 0)
+                toKill.add(e);
+        }
+        enemies.removeAll(toKill);
+    }
+
     private void addNotification(String s) {
         Label nLabel = new Label(s);
         notificationLabels.add(nLabel);
@@ -107,15 +126,15 @@ public class MapScene extends GameScene {
         root.setAlignment(nLabel, Pos.BOTTOM_RIGHT);
 
         for (Label note: notificationLabels) {
-            TranslateTransition tt = new TranslateTransition(Duration.millis(250), note);
+            TranslateTransition tt = new TranslateTransition(Duration.millis(125), note);
             tt.setByY(-(24+8));
             tt.play();
         }
 
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(250), nLabel);
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(125), nLabel);
         fadeIn.setFromValue(0);
         fadeIn.setToValue(1);
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(250), nLabel);
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(125), nLabel);
         fadeOut.setToValue(0);
 
         SequentialTransition sq = new SequentialTransition(
@@ -174,10 +193,15 @@ public class MapScene extends GameScene {
         });
 
         //TODO: Click code is all test stuff
-        scene.setOnMouseClicked(event -> {
+        canvas.setOnMouseClicked(event -> {
             int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
             notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
-            for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
+            //for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
+            if (playerTurn) {
+                boolean used = new RangedAttack().use(pos[0], pos[1]);
+                notificationQueue.add(used + "");
+                if (used) playerTurn = false;
+            }
         });
 
 
@@ -203,9 +227,12 @@ public class MapScene extends GameScene {
     @Override
     public void update(double delta) {
 
+        //TODO: Split this monster function up a bit. Jesus.
+
         // playerTurn is set to false when the player has done an action
         // playerTurn is false if any Enemy has work to do next frame
         if (!playerTurn) {
+            pruneEnemies();
             for (int i = 0; i < enemies.size(); i++) {
                 Enemy curEnemy = enemies.get(i);
                 if (!curEnemy.canAct) {
@@ -233,7 +260,6 @@ public class MapScene extends GameScene {
                 mapDirX = 0; mapDirY = 0;
                 playerTurn = false;
                 for (Enemy e : enemies) e.canAct = true;
-                System.out.println("\n\n");
             }
         }
         if (mapDirX == 0 && mapDirY == 0 && playerTurn) {
