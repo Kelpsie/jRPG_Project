@@ -14,13 +14,11 @@ import javafx.util.Duration;
 import loader.ImageLoader;
 import main.Game;
 import main.GameLoop;
-import models.Player;
-import models.Enemy;
-import models.GameMap;
-import models.GameScene;
+import models.*;
 import skills.RangedAttack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -43,12 +41,15 @@ public class MapScene extends GameScene {
     int tileAnimationCounter;
     public static int mapX, mapY;
     final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
-    int playerX = PLAYERSTARTX, playerY = PLAYERSTARTY;
     int mapDirX = 0, mapDirY = 0;
-    boolean playerTurn = true;
+    boolean playerTurn = false;
 
 
     static ArrayList<Enemy> enemies;
+    static HashMap<String, Skill> skills;
+    static String currentSkill = "Ranged Attack";
+
+    public static Random random = new Random();
 
 
     /*
@@ -108,6 +109,13 @@ public class MapScene extends GameScene {
         return null;
     }
 
+    public static boolean walkable(int x, int y) {
+
+        return (!map.collidable(x, y) &&
+                enemyAt(x, y) == null &&
+                (player.posX != x || player.posY != y));
+    }
+
     private static void pruneEnemies() {
         ArrayList<Enemy> toKill = new ArrayList<>();
         for (Enemy e: enemies) {
@@ -117,17 +125,23 @@ public class MapScene extends GameScene {
         enemies.removeAll(toKill);
     }
 
+    void endPlayerTurn() {
+        playerTurn = false;
+        for (Enemy e : enemies) e.act();
+        for (Skill s : skills.values()) s.turnsSinceUsed += 1;
+    }
+
     private void addNotification(String s) {
         Label nLabel = new Label(s);
         notificationLabels.add(nLabel);
         nLabel.getStyleClass().add("notification");
-        nLabel.setTranslateY(24 + 8);
+        nLabel.setTranslateY(27);
         root.getChildren().add(nLabel);
         root.setAlignment(nLabel, Pos.BOTTOM_RIGHT);
 
         for (Label note: notificationLabels) {
             TranslateTransition tt = new TranslateTransition(Duration.millis(125), note);
-            tt.setByY(-(24+8));
+            tt.setByY(-(27));
             tt.play();
         }
 
@@ -176,7 +190,7 @@ public class MapScene extends GameScene {
 
         notificationQueue = new LinkedList<>();
         notificationLabels = new LinkedList<>();
-        Timeline doNotes = new Timeline(new KeyFrame(Duration.millis(500), e -> {
+        Timeline doNotes = new Timeline(new KeyFrame(Duration.millis(250), e -> {
             if (notificationQueue.size() > 0)
                 addNotification(notificationQueue.pop());
         }));
@@ -198,9 +212,13 @@ public class MapScene extends GameScene {
             notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
             //for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
             if (playerTurn) {
-                boolean used = new RangedAttack().use(pos[0], pos[1]);
-                notificationQueue.add(used + "");
-                if (used) playerTurn = false;
+                if (skills.get(currentSkill).canUse(pos[0], pos[1])) {
+                    skills.get(currentSkill).use(pos[0], pos[1]);
+                    notificationQueue.add("Used " + currentSkill );
+                    endPlayerTurn();
+                } else {
+                    notificationQueue.add("Invalid position for " + currentSkill);
+                }
             }
         });
 
@@ -216,8 +234,8 @@ public class MapScene extends GameScene {
         enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 13, 20, 0));
         enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 26, 17, 0));
 
-        for (Enemy e: enemies)
-            e.move(new Random().nextInt(4));
+        skills = new HashMap<>();
+        skills.put("Ranged Attack", new RangedAttack());
 
     }
 
@@ -235,10 +253,6 @@ public class MapScene extends GameScene {
             pruneEnemies();
             for (int i = 0; i < enemies.size(); i++) {
                 Enemy curEnemy = enemies.get(i);
-                if (!curEnemy.canAct) {
-                    playerTurn = true;
-                    continue;
-                }
                 if (curEnemy.update()) {
                     playerTurn = false;
                     break;
@@ -247,33 +261,32 @@ public class MapScene extends GameScene {
                 }
                 playerTurn = true;
             }
-        }
+        } else {
+            if (mapDirX != 0 || mapDirY != 0) {
+                mapX += (mapDirX * 2);
+                mapY += (mapDirY * 2);
 
-        if (mapDirX != 0 || mapDirY != 0) {
-            mapX += (mapDirX * 2);
-            mapY += (mapDirY * 2);
 
-
-            // If we've moved the width/height of one tile, stop moving
-            if (mapX % map.tileSize == 0 && mapY % map.tileSize == 0) {
-                player.posX -= mapDirX; player.posY -= mapDirY;
-                mapDirX = 0; mapDirY = 0;
-                playerTurn = false;
-                for (Enemy e : enemies) e.canAct = true;
+                // If we've moved the width/height of one tile, stop moving
+                if (mapX % map.tileSize == 0 && mapY % map.tileSize == 0) {
+                    player.posX -= mapDirX; player.posY -= mapDirY;
+                    mapDirX = 0; mapDirY = 0;
+                    endPlayerTurn();
+                }
             }
-        }
-        if (mapDirX == 0 && mapDirY == 0 && playerTurn) {
-            if (keys.contains(KeyCode.UP))          mapDirY = 1;
-            else if (keys.contains(KeyCode.DOWN))   mapDirY = -1;
-            else if (keys.contains(KeyCode.LEFT))   mapDirX = 1;
-            else if (keys.contains(KeyCode.RIGHT))  mapDirX = -1;
+            if (mapDirX == 0 && mapDirY == 0 && playerTurn) {
+                if (keys.contains(KeyCode.UP))          mapDirY = 1;
+                else if (keys.contains(KeyCode.DOWN))   mapDirY = -1;
+                else if (keys.contains(KeyCode.LEFT))   mapDirX = 1;
+                else if (keys.contains(KeyCode.RIGHT))  mapDirX = -1;
 
 
 
-            // If player would collide with the map, stop moving
-            // Subtract here instead of add because the map moves left as the player moves right, etc
-            if (map.collidable(player.posX - mapDirX, player.posY - mapDirY)) {
-                mapDirX = 0; mapDirY = 0;
+                // If player would collide with the map or an enemy, don't move
+                // Subtract here instead of add because the map moves left as the player moves right, etc
+                if (!walkable(player.posX - mapDirX, player.posY - mapDirY)) {
+                    mapDirX = 0; mapDirY = 0;
+                }
             }
         }
     }

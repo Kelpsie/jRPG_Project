@@ -4,8 +4,8 @@
     -fx-text-fill: #ffffff;
     -fx-font-family: "VT220-mod";
     -fx-font-weight: bold;
-    -fx-font-size: 28px;
-    -fx-background-color: rgba(60, 60, 60, 0.6);
+    -fx-font-size: 22px;
+    -fx-background-color: rgba(60, 60, 60, 0.7);
 }
 .notification .text {
     -fx-stroke: none;
