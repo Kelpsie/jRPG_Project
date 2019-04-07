@@ -1,15 +1,21 @@
 package scenes;
 
+import HUD.MainHUD;
+import com.sun.tools.javac.Main;
 import enemies.SquareEnemy;
 import javafx.animation.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import loader.ImageLoader;
 import main.Game;
@@ -30,7 +36,7 @@ public class MapScene extends GameScene {
     LinkedList<Label> notificationLabels;
     public static LinkedList<String> notificationQueue;
 
-    StackPane root;
+    public static StackPane root;
     Canvas canvas;
     GraphicsContext graphics;
 
@@ -47,7 +53,7 @@ public class MapScene extends GameScene {
 
     static ArrayList<Enemy> enemies;
     static HashMap<String, Skill> skills;
-    static String currentSkill = "Ranged Attack";
+    public static String currentSkill = null;
 
     public static Random random = new Random();
 
@@ -83,7 +89,8 @@ public class MapScene extends GameScene {
                 int tile = map.tileAt("Main Map", mapX, mapY); // <- change this to use a diff layer
                 if (tile == 21) {
                     int toDraw = (tile - 1) + tileAnimationCounter;
-                    graphicsContext.drawImage(tiles.get(toDraw), ((mapX * tilesize)+x), ((mapY * tilesize)+y));
+                    graphicsContext.drawImage(tiles.get(toDraw),
+                            ((mapX * tilesize)+x), ((mapY * tilesize)+y));
 
                 }
             }
@@ -129,6 +136,8 @@ public class MapScene extends GameScene {
         playerTurn = false;
         for (Enemy e : enemies) e.act();
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
+        Player.regenHealth();
+        MainHUD.health.setText(Integer.toString(Player.hp));
     }
 
     private void addNotification(String s) {
@@ -166,13 +175,25 @@ public class MapScene extends GameScene {
      */
 
     public MapScene() {
-
         root = new StackPane();
+        /*HBox hb = new HBox();
+        Button skill1 = new Button("Skill1");
+        Button skill2 = new Button("Skill2");
+        Button skill3 = new Button("Skill3");
+        Button tree = new Button("Tree");*/
+
+        MainHUD.initHUD();
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
         scene.getStylesheets().add("styles/map.css");
 
         canvas = new Canvas(Game.WIDTH, Game.HEIGHT);
         root.getChildren().add(canvas);
+
+        root.getChildren().addAll(MainHUD.hb);
+        MainHUD.hb.setPickOnBounds(false);
+
+
+        canvas.requestFocus();
         graphics = canvas.getGraphicsContext2D();
         player = new Player(graphics, 0, PLAYERSTARTX, PLAYERSTARTY);
 
@@ -198,27 +219,35 @@ public class MapScene extends GameScene {
         doNotes.play();
 
         scene.setOnKeyPressed(event -> {
+            root.requestFocus();
             if (!keys.contains(event.getCode()))
                 keys.add(event.getCode());
         });
         scene.setOnKeyReleased(event -> {
+            root.requestFocus();
             if (keys.contains(event.getCode()))
                 keys.remove(event.getCode());
         });
 
         //TODO: Click code is all test stuff
         canvas.setOnMouseClicked(event -> {
+            root.requestFocus();
             int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
             notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
             //for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
             if (playerTurn) {
-                if (skills.get(currentSkill).canUse(pos[0], pos[1])) {
-                    skills.get(currentSkill).use(pos[0], pos[1]);
-                    notificationQueue.add("Used " + currentSkill );
-                    endPlayerTurn();
+                if (currentSkill != null) {
+                    if (skills.get(currentSkill).canUse(pos[0], pos[1])) {
+                        skills.get(currentSkill).use(pos[0], pos[1]);
+                        notificationQueue.add("Used " + currentSkill );
+                        endPlayerTurn();
+                    } else {
+                        notificationQueue.add("Invalid position for " + currentSkill);
+                    }
                 } else {
-                    notificationQueue.add("Invalid position for " + currentSkill);
+                    notificationQueue.add("No Skill Selected!");
                 }
+
             }
         });
 

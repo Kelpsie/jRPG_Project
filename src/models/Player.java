@@ -14,7 +14,9 @@ public class Player {
     private static ArrayList<Image> animations = new ArrayList<>();
     public static int animationCounter = 0;
     public static int charFrameNumber = 0;
-    public int hp = 100;
+    public static int hp = 100;
+    public static int regenValue = 2;
+    public static int level = 0;
 
 
     public Player(GraphicsContext graphicsContext, int id, int x, int y){
@@ -22,6 +24,15 @@ public class Player {
         this.graphicsContext = graphicsContext;
         this.posX = x; this.posY = y;
         ImageLoader.readTileMap("assets/MainChar.png", animations, 32);
+    }
+
+    public static void regenHealth(){
+        if (hp < 100){
+            hp += regenValue;
+            if ( hp > 100){
+                hp = 100;
+            }
+        }
     }
 
     public int getId() {

@@ -41,7 +41,6 @@ public class OpeningScene {
 
     public OpeningScene() {
 
-
         root = new BorderPane();
         root.setId("root");
 
@@ -294,16 +293,14 @@ public class OpeningScene {
                 shapes++;
             }
         });
-
         parallelTransition.play();
-
-
-
     }
 
     public void start() {
         AudioHandler.playBackgroundAudio("accessdenied.wav");
+        AudioHandler.setVolume();
         Game.stage.setScene(scene);
+
 
 
     }

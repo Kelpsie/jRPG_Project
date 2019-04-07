@@ -1,13 +1,68 @@
+@font-face {
+    src: url('PressStart2P-Regular.ttf');
+}
 
 .notification {
     -fx-label-padding: 2px 8px;
     -fx-text-fill: #ffffff;
     -fx-font-family: "VT220-mod";
     -fx-font-weight: bold;
-    -fx-font-size: 28px;
-    -fx-background-color: rgba(60, 60, 60, 0.6);
+    -fx-font-size: 22px;
+    -fx-background-color: rgba(60, 60, 60, 0.7);
 }
 .notification .text {
     -fx-stroke: none;
     -fx-stroke-width: 1px;
+}
+
+/*
+    HUD STYLES
+ */
+
+.health {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-size: 32px;
+}
+
+.skill1 {
+    -fx-background-image: url("ranged.png");
+    -fx-backgorund-color: transparent;
+}
+
+.skill1:armed {
+    -fx-background-image: url("ranged_cooldown.png");
+    -fx-backgorund-color: transparent;
+}
+
+.skill2 {
+    -fx-background-image: url("ranged.png");
+    -fx-backgorund-color: transparent;
+}
+
+.skill2:armed {
+    -fx-background-image: url("ranged_cooldown.png");
+    -fx-backgorund-color: transparent;
+}
+
+
+.skill3 {
+    -fx-background-image: url("ranged.png");
+    -fx-backgorund-color: transparent;
+}
+
+.skill3:armed {
+    -fx-background-image: url("ranged_cooldown.png");
+    -fx-backgorund-color: transparent;
+}
+
+
+.tree {
+    -fx-background-image: url("skilltree.png");
+    -fx-backgorund-color: transparent;
+}
+
+.tree:armed {
+    -fx-background-image: url("skilltree_select.png");
+    -fx-background-color: transparent;
 }
