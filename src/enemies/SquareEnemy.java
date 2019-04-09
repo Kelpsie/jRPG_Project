@@ -9,7 +9,7 @@ import scenes.MapScene;
 public class SquareEnemy extends Enemy {
 
     public SquareEnemy(GraphicsContext graphicsContext, String file, int frameSize, int framesToSkip, int x, int y, int type) {
-        super(graphicsContext, file, frameSize, framesToSkip, x, y);
+        super(graphicsContext, file, frameSize, framesToSkip, x, y, 76);
         switch (type) {
             case 0: hp = 5; break;
         }

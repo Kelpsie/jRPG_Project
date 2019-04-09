@@ -20,9 +20,10 @@ public abstract class Enemy {
     private int direction = -1;
     public boolean canAct = true;
     public int hp = 100;
+    public int xpWorth;
 
 
-    public Enemy(GraphicsContext graphicsContext, String file, int frameSize, int framesToSkip, int x, int y) {
+    public Enemy(GraphicsContext graphicsContext, String file, int frameSize, int framesToSkip, int x, int y, int xp) {
         this.graphicsContext = graphicsContext;
         ImageLoader.readTileMap(file, animations, frameSize);
         this.framesToSkip = framesToSkip + 1;
@@ -32,6 +33,7 @@ public abstract class Enemy {
         drawX = posX * MapScene.map.tileSize;
         drawY = posY * MapScene.map.tileSize;
         targetX = posX; targetY = posY;
+        this.xpWorth = xp;
     }
 
     public void takeDamage(int damage) {

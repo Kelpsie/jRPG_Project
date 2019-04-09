@@ -66,3 +66,65 @@
     -fx-background-image: url("skilltree_select.png");
     -fx-background-color: transparent;
 }
+
+.back {
+    -fx-background-image: url("backBtn.png");
+    -fx-background-color: transparent;
+}
+
+.back:hover {
+    -fx-background-image: url("backBtnHover.png");
+    -fx-background-color: transparent;
+}
+
+.back:armed {
+    -fx-background-image: url("backBtnArmed.png");
+    -fx-background-color: transparent;
+}
+
+.skills {
+    -fx-background-color: #0575FFC0;
+}
+
+.Skill1Label {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-text-fill: #ffffff;
+}
+
+.Skill2Label {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-text-fill: #ffffff;
+}
+
+.Skill3Label {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-text-fill: #ffffff;
+}
+
+.skillPoints {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-text-fill: #ffffff;
+}
+
+.add {
+    -fx-background-image: url("plusBtn.png");
+    -fx-background-color: transparent;
+}
+
+.add:hover {
+    -fx-background-image: url("plusBtnHover.png");
+    -fx-background-color: transparent;
+}
+
+.add:armed {
+    -fx-background-image: url("plusBtnArmed.png");
+    -fx-background-color: transparent;
+}

@@ -44,6 +44,7 @@ public class MapScene extends GameScene {
     public static GameMap map;
     Image mapImage;
 
+    public static int totalXpEarned;
     int tileAnimationCounter;
     public static int mapX, mapY;
     final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
@@ -126,8 +127,11 @@ public class MapScene extends GameScene {
     private static void pruneEnemies() {
         ArrayList<Enemy> toKill = new ArrayList<>();
         for (Enemy e: enemies) {
-            if (e.hp <= 0)
+            if (e.hp <= 0) {
                 toKill.add(e);
+                Player.setXP(e.xpWorth);
+            }
+
         }
         enemies.removeAll(toKill);
     }
@@ -189,8 +193,9 @@ public class MapScene extends GameScene {
         canvas = new Canvas(Game.WIDTH, Game.HEIGHT);
         root.getChildren().add(canvas);
 
-        root.getChildren().addAll(MainHUD.hb);
-        MainHUD.hb.setPickOnBounds(false);
+        root.getChildren().addAll(MainHUD.BottomHUDVBox);
+        root.getChildren().add(MainHUD.skillUpgrade);
+        MainHUD.BottomHUDVBox.setPickOnBounds(false);
 
 
         canvas.requestFocus();
