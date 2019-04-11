@@ -10,7 +10,7 @@ public class Player {
 
 
     private int id;
-    public int posX, posY;
+    public static int posX, posY;
     private GraphicsContext graphicsContext;
     private static ArrayList<Image> animations = new ArrayList<>();
     public static int animationCounter = 0;
@@ -22,10 +22,9 @@ public class Player {
     public static int level = 1;
 
 
-    public Player(GraphicsContext graphicsContext, int id, int x, int y){
+    public Player(GraphicsContext graphicsContext, int id){
         this.id = id;
         this.graphicsContext = graphicsContext;
-        this.posX = x; this.posY = y;
         ImageLoader.readTileMap("assets/MainChar.png", animations, 32);
     }
 

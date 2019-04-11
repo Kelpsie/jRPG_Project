@@ -18,11 +18,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import loader.ImageLoader;
+import loader.SaveGame;
 import main.Game;
 import main.GameLoop;
 import models.*;
 import skills.RangedAttack;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,10 +46,9 @@ public class MapScene extends GameScene {
     public static GameMap map;
     Image mapImage;
 
-    public static int totalXpEarned;
     int tileAnimationCounter;
     public static int mapX, mapY;
-    final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
+    //final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
     int mapDirX = 0, mapDirY = 0;
     boolean playerTurn = false;
 
@@ -142,6 +143,7 @@ public class MapScene extends GameScene {
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
         Player.regenHealth();
         MainHUD.health.setText(Integer.toString(Player.hp));
+        SaveGame.writeData();
     }
 
     private void addNotification(String s) {
@@ -179,12 +181,12 @@ public class MapScene extends GameScene {
      */
 
     public MapScene() {
+        try {
+            SaveGame.readData();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         root = new StackPane();
-        /*HBox hb = new HBox();
-        Button skill1 = new Button("Skill1");
-        Button skill2 = new Button("Skill2");
-        Button skill3 = new Button("Skill3");
-        Button tree = new Button("Tree");*/
 
         MainHUD.initHUD();
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
@@ -200,7 +202,7 @@ public class MapScene extends GameScene {
 
         canvas.requestFocus();
         graphics = canvas.getGraphicsContext2D();
-        player = new Player(graphics, 0, PLAYERSTARTX, PLAYERSTARTY);
+        player = new Player(graphics, 0);
 
         ImageLoader.readTileMap("assets/maptilestest.png", tiles, 32);
         mapImage = ImageLoader.loadImage("file:assets/testmap.png");
@@ -209,7 +211,7 @@ public class MapScene extends GameScene {
             map = new GameMap("testmap.tmx");
         } catch (Exception e) { e.printStackTrace();}
 
-        int[] mapPos = mapToScreen(PLAYERSTARTX, PLAYERSTARTY);
+        int[] mapPos = mapToScreen(Player.posX, Player.posY);
         mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
         mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];
 

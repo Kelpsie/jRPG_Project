@@ -5,11 +5,13 @@ import javafx.application.Application;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import loader.SaveGame;
 import models.GameScene;
 import scenes.BattleScene;
 import scenes.MapScene;
 import scenes.OpeningScene;
 
+import java.io.IOException;
 import java.util.Hashtable;
 
 public class Game extends Application {
@@ -29,6 +31,11 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        try {
+            SaveGame.createFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         AudioHandler.initAudiohandler();
         Font.loadFont(getClass().getResourceAsStream("/styles/VT220-mod.ttf"), 16);
 
