@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class GameMap {
@@ -18,6 +19,7 @@ public class GameMap {
     public int tileSize;
     public int width, height;
     public Hashtable<String, int[]> layers = new Hashtable<>();
+    public ArrayList<Spawner> spawners = new ArrayList<>();
 
     public GameMap(String filename) throws IOException, ParserConfigurationException, SAXException {
         File file = new File("assets/" + filename);
@@ -44,6 +46,33 @@ public class GameMap {
             layers.put(layer.getAttribute("name"), data);
         }
 
+        NodeList spawnerElements = document.getElementsByTagName("object");
+        for (int i = 0; i < spawnerElements.getLength(); i++) {
+            Element spawnerElement = (Element)spawnerElements.item(i);
+            NodeList properties = spawnerElement.getElementsByTagName("property");
+            String enemies = "";
+            int x, y, spawnRadius=5, enterRadius=3, exitRadius=10;
+            for (int j = 0; j < properties.getLength();j++) {
+                Element property = (Element) properties.item(j);
+                switch (property.getAttribute("name")) {
+                    case "enemies":
+                        enemies = property.getAttribute("value");
+                        break;
+                    case "enterRadius":
+                        enterRadius = Integer.parseInt(property.getAttribute("value"));
+                        break;
+                    case "exitRadius":
+                        exitRadius = Integer.parseInt(property.getAttribute("value"));
+                        break;
+                    case "spawnRadius":
+                        spawnRadius = Integer.parseInt(property.getAttribute("value"));
+                        break;
+                }
+            }
+            x = Integer.parseInt(spawnerElement.getAttribute("x")) / tileSize;
+            y = Integer.parseInt(spawnerElement.getAttribute("y")) / tileSize;
+            spawners.add(new Spawner(x, y, enterRadius, exitRadius, spawnRadius, enemies));
+        }
     }
 
     public int tileAt(String layer, int x, int y) {

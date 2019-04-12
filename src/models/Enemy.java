@@ -23,8 +23,7 @@ public abstract class Enemy {
     public int xpWorth;
 
 
-    public Enemy(GraphicsContext graphicsContext, String file, int frameSize, int framesToSkip, int x, int y, int xp) {
-        this.graphicsContext = graphicsContext;
+    public Enemy(String file, int frameSize, int framesToSkip, int x, int y, int xp) {
         ImageLoader.readTileMap(file, animations, frameSize);
         this.framesToSkip = framesToSkip + 1;
         posX = x; posY = y;
@@ -75,7 +74,7 @@ public abstract class Enemy {
     }
 
 
-    public void draw() {
+    public void draw(GraphicsContext graphicsContext) {
         framesSkipped = (framesSkipped + 1) % framesToSkip;
         if (framesSkipped == 0)
             currentFrame = (currentFrame + 1) % animations.size();

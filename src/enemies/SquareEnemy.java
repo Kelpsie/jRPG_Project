@@ -8,8 +8,8 @@ import scenes.MapScene;
 
 public class SquareEnemy extends Enemy {
 
-    public SquareEnemy(GraphicsContext graphicsContext, String file, int frameSize, int framesToSkip, int x, int y, int type) {
-        super(graphicsContext, file, frameSize, framesToSkip, x, y, 76);
+    public SquareEnemy(String file, int frameSize, int framesToSkip, int x, int y, int type) {
+        super(file, frameSize, framesToSkip, x, y, 76);
         switch (type) {
             case 0: hp = 5; break;
         }
@@ -28,7 +28,7 @@ public class SquareEnemy extends Enemy {
         } else {
             MainHUD.health.setText(Integer.toString(Player.hp));
             MapScene.player.hp -= 5;
-            MapScene.notificationQueue.add("Dealt 5 damage to player");
+            MapScene.notificationQueue.add("Took 5 damage");
             MapScene.notificationQueue.add("Player HP: " + MapScene.player.hp);
         }
     }

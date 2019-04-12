@@ -1,7 +1,6 @@
 package scenes;
 
 import HUD.MainHUD;
-import com.sun.tools.javac.Main;
 import enemies.SquareEnemy;
 import javafx.animation.*;
 import javafx.geometry.Pos;
@@ -137,10 +136,13 @@ public class MapScene extends GameScene {
         enemies.removeAll(toKill);
     }
 
+    public static void spawnEnemy(Enemy e) { enemies.add(e); }
+
     void endPlayerTurn() {
         playerTurn = false;
         for (Enemy e : enemies) e.act();
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
+        for (Spawner s : map.spawners) s.update();
         Player.regenHealth();
         MainHUD.health.setText(Integer.toString(Player.hp));
         SaveGame.writeData();
@@ -240,7 +242,6 @@ public class MapScene extends GameScene {
         canvas.setOnMouseClicked(event -> {
             root.requestFocus();
             int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
-            notificationQueue.add("X: " + pos[0] + " Y: " + pos[1]);
             //for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
             if (playerTurn) {
                 if (currentSkill != null) {
@@ -249,7 +250,7 @@ public class MapScene extends GameScene {
                         notificationQueue.add("Used " + currentSkill );
                         endPlayerTurn();
                     } else {
-                        notificationQueue.add("Invalid position for " + currentSkill);
+                        notificationQueue.add("Failed to use " + currentSkill);
                     }
                 } else {
                     notificationQueue.add("No Skill Selected!");
@@ -261,14 +262,6 @@ public class MapScene extends GameScene {
 
         //TODO: Remove enemy test code
         enemies = new ArrayList<>();
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 22, 6, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 9, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 18, 15, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 20, 11, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 16, 5, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 14, 9, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 13, 20, 0));
-        enemies.add(new SquareEnemy(graphics, "assets/Enemy_1.png", 32, 10, 26, 17, 0));
 
         skills = new HashMap<>();
         skills.put("Ranged Attack", new RangedAttack());
@@ -287,6 +280,7 @@ public class MapScene extends GameScene {
         // playerTurn is false if any Enemy has work to do next frame
         if (!playerTurn) {
             pruneEnemies();
+            if (enemies.size() <= 0) playerTurn = true;
             for (int i = 0; i < enemies.size(); i++) {
                 Enemy curEnemy = enemies.get(i);
                 if (curEnemy.update()) {
@@ -346,7 +340,7 @@ public class MapScene extends GameScene {
         }
 
         for (Enemy enemy : enemies) {
-            enemy.draw();
+            enemy.draw(graphics);
         }
     }
 }
