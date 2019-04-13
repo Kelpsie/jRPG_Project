@@ -5,9 +5,9 @@
 .notification {
     -fx-label-padding: 2px 8px;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "VT220-mod";
+    -fx-font-family: 'Press Start 2P', cursive;
     -fx-font-weight: bold;
-    -fx-font-size: 22px;
+    -fx-font-size: 12px;
     -fx-background-color: rgba(60, 60, 60, 0.7);
 }
 .notification .text {

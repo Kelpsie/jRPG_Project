@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import models.Player;
 import scenes.MapScene;
@@ -62,6 +63,7 @@ public class MainHUD extends BorderPane {
     public static void initHUD(){
 
         health.setMinWidth(128);
+        xpBar.setFill(Color.GREEN);
         xpBar.setWidth(0);
         xpBar.setHeight(24);
 

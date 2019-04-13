@@ -1,12 +1,16 @@
+@font-face {
+    src: url('PressStart2P-Regular.ttf');
+}
+
 #root {
     -fx-background-color: #111111;
 }
 
 .text {
-    -fx-padding: 20px;
+    -fx-padding: 0px;
     -fx-text-fill: #dddddd;
-    -fx-font-family: "VT220-mod";
-    -fx-font-size: 36px;
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-size: 26px;
 }
 
 #rect_1 {

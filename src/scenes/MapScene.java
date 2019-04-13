@@ -50,7 +50,7 @@ public class MapScene extends GameScene {
     //final int PLAYERSTARTX = 20, PLAYERSTARTY = 10;
     int mapDirX = 0, mapDirY = 0;
     boolean playerTurn = false;
-
+    public static ArrayList<Integer> bossRenderID = new ArrayList<>();
 
     static ArrayList<Enemy> enemies;
     static HashMap<String, Skill> skills;
@@ -88,11 +88,20 @@ public class MapScene extends GameScene {
         for(int mapY=0; mapY<map.height; mapY++) {
             for(int mapX=0; mapX<map.width; mapX++) {
                 int tile = map.tileAt("Main Map", mapX, mapY); // <- change this to use a diff layer
-                if (tile == 21) {
+                if (tile == 57 || tile == 126 ) {
                     int toDraw = (tile - 1) + tileAnimationCounter;
                     graphicsContext.drawImage(tiles.get(toDraw),
                             ((mapX * tilesize)+x), ((mapY * tilesize)+y));
 
+                }
+                if(bossRenderID.contains(tile)) {
+                    if (tileAnimationCounter == 2) {
+                        graphicsContext.drawImage(tiles.get((tile)),
+                                ((mapX * tilesize) + x), ((mapY * tilesize) + y));
+                    } else {
+                        graphicsContext.drawImage(tiles.get((tile - 1)),
+                                ((mapX * tilesize) + x), ((mapY * tilesize) + y));
+                    }
                 }
             }
         }
@@ -183,6 +192,15 @@ public class MapScene extends GameScene {
      */
 
     public MapScene() {
+        bossRenderID.add(129);
+        bossRenderID.add(131);
+        bossRenderID.add(133);
+        bossRenderID.add(135);
+        bossRenderID.add(137);
+        bossRenderID.add(139);
+        bossRenderID.add(141);
+        bossRenderID.add(143);
+        bossRenderID.add(145);
         try {
             SaveGame.readData();
         } catch (FileNotFoundException e) {
@@ -206,11 +224,11 @@ public class MapScene extends GameScene {
         graphics = canvas.getGraphicsContext2D();
         player = new Player(graphics, 0);
 
-        ImageLoader.readTileMap("assets/maptilestest.png", tiles, 32);
-        mapImage = ImageLoader.loadImage("file:assets/testmap.png");
+        ImageLoader.readTileMap("assets/goodset.png", tiles, 32);
+        mapImage = ImageLoader.loadImage("file:assets/untitled.png");
 
         try {
-            map = new GameMap("testmap.tmx");
+            map = new GameMap("untitled.tmx");
         } catch (Exception e) { e.printStackTrace();}
 
         int[] mapPos = mapToScreen(Player.posX, Player.posY);

@@ -30,7 +30,7 @@ public class OpeningScene {
 
     public Scene scene;
     BorderPane root;
-    Button test;
+    Button enter;
     Group player;
 
     final int MAX_SHAPES = 80;
@@ -117,6 +117,7 @@ public class OpeningScene {
         });
 
         Button back = new Button("back");
+        back.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         back.setOnMouseClicked(backEvent -> {
             buttons.setVisible(true);
             title.setVisible(true);
@@ -127,19 +128,18 @@ public class OpeningScene {
 
 
 
-        test = new Button("Enter Game");
-        test.setOnMouseClicked(event -> {
+        enter = new Button("Enter Game");
+        enter.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        enter.setOnMouseClicked(event -> {
             AudioHandler.stopBackgroundAudio();
             Game.setScene("GameMap");
         });
-        test.setOnMouseEntered(new ButtonHover(test));
+        enter.setOnMouseEntered(new ButtonHover(enter));
 
-        Button b2 = new Button("Load Game");
-        b2.setOnMouseEntered(new ButtonHover(b2));
-
-        Button b3 = new Button("Settings");
-        b3.setOnMouseEntered(new ButtonHover(b3));
-        b3.setOnMouseClicked(settings ->{
+        Button settings = new Button("Settings");
+        settings.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        settings.setOnMouseEntered(new ButtonHover(settings));
+        settings.setOnMouseClicked(s ->{
             AudioHandler.playAudio("menuhit.wav");
             buttons.setVisible(false);
             title.setVisible(false);
@@ -156,7 +156,7 @@ public class OpeningScene {
 
 
         settingsBox.getChildren().addAll(volLabel, volPlus, volMinus, back);
-        buttons.getChildren().addAll(test, b2, b3);
+        buttons.getChildren().addAll(enter, settings);
 
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
         scene.getStylesheets().add("styles/opening.css");
