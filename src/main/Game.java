@@ -38,6 +38,7 @@ public class Game extends Application {
         }
         AudioHandler.initAudiohandler();
         Font.loadFont(getClass().getResourceAsStream("/styles/VT220-mod.ttf"), 16);
+        Font.loadFont(getClass().getResourceAsStream("/styles/PressStart2P-Regular.ttf"), 16);
 
         stage = primaryStage;
         stage.setTitle("The Name Of Our Game, I Guess");

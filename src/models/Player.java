@@ -10,7 +10,7 @@ public class Player {
 
 
     private int id;
-    public static int posX, posY;
+    public static int posX = 4, posY = 33;
     private GraphicsContext graphicsContext;
     private static ArrayList<Image> animations = new ArrayList<>();
     public static int animationCounter = 0;

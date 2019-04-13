@@ -52,7 +52,8 @@ public class MapScene extends GameScene {
     boolean playerTurn = false;
     public static ArrayList<Integer> bossRenderID = new ArrayList<>();
 
-    static ArrayList<Enemy> enemies;
+    public static ArrayList<Enemy> enemies;
+    public static ArrayList<Enemy> enemiesToSpawn;
     static HashMap<String, Skill> skills;
     public static String currentSkill = null;
 
@@ -139,6 +140,8 @@ public class MapScene extends GameScene {
             if (e.hp <= 0) {
                 toKill.add(e);
                 Player.setXP(e.xpWorth);
+            } if (distance(e.posX, e.posY, player.posX, player.posY) > 20) {
+                toKill.add(e);
             }
 
         }
@@ -150,6 +153,8 @@ public class MapScene extends GameScene {
     void endPlayerTurn() {
         playerTurn = false;
         for (Enemy e : enemies) e.act();
+        for (Enemy e : enemiesToSpawn) spawnEnemy(e);
+        enemiesToSpawn.clear();
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
         for (Spawner s : map.spawners) s.update();
         Player.regenHealth();
@@ -161,13 +166,13 @@ public class MapScene extends GameScene {
         Label nLabel = new Label(s);
         notificationLabels.add(nLabel);
         nLabel.getStyleClass().add("notification");
-        nLabel.setTranslateY(27);
+        nLabel.setTranslateY(17);
         root.getChildren().add(nLabel);
         root.setAlignment(nLabel, Pos.BOTTOM_RIGHT);
 
         for (Label note: notificationLabels) {
             TranslateTransition tt = new TranslateTransition(Duration.millis(125), note);
-            tt.setByY(-(27));
+            tt.setByY(-(17));
             tt.play();
         }
 
@@ -203,7 +208,7 @@ public class MapScene extends GameScene {
         bossRenderID.add(145);
         try {
             SaveGame.readData();
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         root = new StackPane();
@@ -265,10 +270,8 @@ public class MapScene extends GameScene {
                 if (currentSkill != null) {
                     if (skills.get(currentSkill).canUse(pos[0], pos[1])) {
                         skills.get(currentSkill).use(pos[0], pos[1]);
-                        notificationQueue.add("Used " + currentSkill );
                         endPlayerTurn();
                     } else {
-                        notificationQueue.add("Failed to use " + currentSkill);
                     }
                 } else {
                     notificationQueue.add("No Skill Selected!");
@@ -280,6 +283,7 @@ public class MapScene extends GameScene {
 
         //TODO: Remove enemy test code
         enemies = new ArrayList<>();
+        enemiesToSpawn = new ArrayList<>();
 
         skills = new HashMap<>();
         skills.put("Ranged Attack", new RangedAttack());
@@ -296,6 +300,8 @@ public class MapScene extends GameScene {
 
         // playerTurn is set to false when the player has done an action
         // playerTurn is false if any Enemy has work to do next frame
+
+        MainHUD.health.setText(Integer.toString(Player.hp));
         if (!playerTurn) {
             pruneEnemies();
             if (enemies.size() <= 0) playerTurn = true;

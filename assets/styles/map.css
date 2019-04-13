@@ -1,7 +1,3 @@
-@font-face {
-    src: url('PressStart2P-Regular.ttf');
-}
-
 .notification {
     -fx-label-padding: 2px 8px;
     -fx-text-fill: #ffffff;

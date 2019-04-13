@@ -28,8 +28,8 @@ public class SaveGame {
         DefaultData.add(0);
         DefaultData.add(0);
         DefaultData.add(0);
-        DefaultData.add(15);
-        DefaultData.add(15);
+        DefaultData.add(4);
+        DefaultData.add(33);
         DefaultData.add(1);
         File file = new File("assets/000.dat");
         if(file.createNewFile()){

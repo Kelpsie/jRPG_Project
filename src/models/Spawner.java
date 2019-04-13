@@ -1,6 +1,9 @@
 package models;
 
+import enemies.CircleEnemy;
+import enemies.PentagonEnemy;
 import enemies.SquareEnemy;
+import enemies.TriangleEnemy;
 import scenes.MapScene;
 
 public class Spawner {
@@ -17,11 +20,24 @@ public class Spawner {
         this.enemies = enemies.split("");
     }
 
-    public void spawn(int x, int y, String eString) {
+    public static void spawn(int x, int y, String eString, int xp_multi) {
         switch (eString) {
-            case "0":
-                MapScene.spawnEnemy(new SquareEnemy("assets/Enemy_1.png", 32, 10, x, y, 0));
-                break;
+            case "0": MapScene.spawnEnemy(new SquareEnemy(x, y, 0, xp_multi)); break;
+            case "1":  MapScene.spawnEnemy(new SquareEnemy(x, y, 1, xp_multi)); break;
+            case "2": MapScene.spawnEnemy(new SquareEnemy(x, y, 2, xp_multi)); break;
+            case "3": MapScene.spawnEnemy(new SquareEnemy(x, y, 3, xp_multi)); break;
+            case "4": MapScene.spawnEnemy(new TriangleEnemy(x, y, 0, xp_multi)); break;
+            case "5": MapScene.spawnEnemy(new TriangleEnemy(x, y, 1, xp_multi)); break;
+            case "6": MapScene.spawnEnemy(new TriangleEnemy(x, y, 2, xp_multi)); break;
+            case "7": MapScene.spawnEnemy(new TriangleEnemy(x, y, 3, xp_multi)); break;
+            case "8": MapScene.spawnEnemy(new PentagonEnemy(x, y, 0, xp_multi)); break;
+            case "9": MapScene.spawnEnemy(new PentagonEnemy(x, y, 1, xp_multi)); break;
+            case "A": MapScene.spawnEnemy(new PentagonEnemy(x, y, 2, xp_multi)); break;
+            case "B": MapScene.spawnEnemy(new PentagonEnemy(x, y, 3, xp_multi)); break;
+            case "C": MapScene.spawnEnemy(new CircleEnemy(x, y, 0, xp_multi)); break;
+            case "D": MapScene.spawnEnemy(new CircleEnemy(x, y, 1, xp_multi)); break;
+            case "E": MapScene.spawnEnemy(new CircleEnemy(x, y, 2, xp_multi)); break;
+            case "F": MapScene.spawnEnemy(new CircleEnemy(x, y, 3, xp_multi)); break;
         }
     }
 
@@ -47,7 +63,7 @@ public class Spawner {
                     int eY = MapScene.random.nextInt(spawnRadius*2) + (y - spawnRadius);
                     if (!MapScene.walkable(eX, eY))
                         continue;
-                    spawn(eX, eY, eString);
+                    spawn(eX, eY, eString, 1);
                     spawned = true;
                 }
             }

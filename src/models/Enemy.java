@@ -17,9 +17,9 @@ public abstract class Enemy {
     private int framesToSkip;
     private int framesSkipped = 0;
     private int currentFrame = 0;
-    private int direction = -1;
     public boolean canAct = true;
     public int hp = 100;
+    public int damage = 5;
     public int xpWorth;
 
 

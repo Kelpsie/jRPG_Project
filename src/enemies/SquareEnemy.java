@@ -7,11 +7,20 @@ import models.Player;
 import scenes.MapScene;
 
 public class SquareEnemy extends Enemy {
-
-    public SquareEnemy(String file, int frameSize, int framesToSkip, int x, int y, int type) {
-        super(file, frameSize, framesToSkip, x, y, 76);
+    static String[] files = {
+            "Enemy_1.png",
+            "Enemy_1_hue2.png",
+            "Enemy_1_hue3.png",
+            "Enemy_1_hue4.png"
+    };
+    static int[] xp = { 20, 50, 100, 300 };
+    public SquareEnemy(int x, int y, int type, int xp_multi) {
+        super("assets/" + files[type], 32, 10, x, y, xp[type]*xp_multi);
         switch (type) {
-            case 0: hp = 5; break;
+            case 0: hp = 15; damage = 5; break;
+            case 1: hp = 40; damage = 15; break;
+            case 2: hp = 100; damage = 35; break;
+            case 3: hp = 250; damage = 60; break;
         }
     }
 
@@ -26,10 +35,8 @@ public class SquareEnemy extends Enemy {
                 else if (posY > MapScene.player.posY) move(posX, posY - 1);
             }
         } else {
-            MainHUD.health.setText(Integer.toString(Player.hp));
-            MapScene.player.hp -= 5;
-            MapScene.notificationQueue.add("Took 5 damage");
-            MapScene.notificationQueue.add("Player HP: " + MapScene.player.hp);
+            MapScene.player.hp -= damage;
+            MapScene.notificationQueue.add("Took "+damage+" damage from Square");
         }
     }
 

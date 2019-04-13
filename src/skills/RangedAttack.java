@@ -12,25 +12,32 @@ public class RangedAttack extends Skill {
     }
 
     int damage() {
-        return 5 + level * level;
+        return 5 + (int)(level * (level/2.0+1));
     }
 
     int range() {
-        return 2 + level * 2;
+        return 3 + level;
     }
 
     @Override
     public boolean canUse(int x, int y) {
         if (turnsSinceUsed < cooldown) {
             System.out.println("Can't use yet: " + turnsSinceUsed + "/" + cooldown);
+            MapScene.notificationQueue.add("Ranged Attack on cooldown");
             return false;
         }
         Enemy e = MapScene.enemyAt(x, y);
-        if (e == null) return false;
+        if (e == null) {
+            MapScene.notificationQueue.add("No enemy targeted");
+            return false;
+        }
 
         if (MapScene.distance(MapScene.player.posX, MapScene.player.posY, x, y) <= range()) {
             return true;
         }
+
+
+        MapScene.notificationQueue.add("Enemy out of range (" + range() + ")");
         return false;
     }
 
@@ -39,9 +46,8 @@ public class RangedAttack extends Skill {
         Enemy e = MapScene.enemyAt(x, y);
 
         e.takeDamage(damage());
-        MapScene.notificationQueue.add(e.hp + "");
+        MapScene.notificationQueue.add("Dealt " + damage() + " damage." );
 
-        System.out.println("..");
         turnsSinceUsed = 0;
     }
 }
