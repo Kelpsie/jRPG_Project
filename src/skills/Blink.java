@@ -1,5 +1,6 @@
 package skills;
 
+import audio.AudioHandler;
 import models.Player;
 import models.Skill;
 import scenes.MapScene;
@@ -38,5 +39,6 @@ public class Blink extends Skill {
     public void use(int x, int y) {
         MapScene.movePlayer(x, y);
         turnsSinceUsed = 0;
+        AudioHandler.playAudio("blink.wav");
     }
 }

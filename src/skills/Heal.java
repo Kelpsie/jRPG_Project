@@ -1,5 +1,6 @@
 package skills;
 
+import audio.AudioHandler;
 import models.Player;
 import models.Skill;
 import scenes.MapScene;
@@ -22,5 +23,6 @@ public class Heal extends Skill {
         int restoreValue = (int) Math.round(Math.abs(Player.hp) / ((level / 2.6) * 20));
         Player.restoreHealth(restoreValue);
         MapScene.notificationQueue.add("Healed " + restoreValue + " health");
+        AudioHandler.playAudio("heal.wav");
     }
 }

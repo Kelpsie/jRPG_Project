@@ -1,5 +1,6 @@
 package skills;
 
+import audio.AudioHandler;
 import models.Enemy;
 import models.Player;
 import models.Skill;
@@ -40,5 +41,6 @@ public class MeleeAttack extends Skill {
         MapScene.notificationQueue.add("Dealt " + damage() + " damage." );
 
         turnsSinceUsed = 0;
+        AudioHandler.playAudio("melee.wav");
     }
 }
