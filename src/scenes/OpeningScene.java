@@ -4,6 +4,7 @@ import audio.AudioHandler;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Bloom;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -19,8 +21,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import loader.GetFilePath;
+import loader.SaveGame;
 import main.Game;
 import models.GameScene;
+import models.Player;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -36,8 +40,9 @@ public class OpeningScene {
     final int MAX_SHAPES = 80;
     int shapes = 1;
     Random rand = new Random();
-    MediaPlayer mp0;
-    MediaPlayer mp1;
+
+    ArrayList<String> saveFiles = new ArrayList<>();
+    ArrayList<String> saveNames = new ArrayList<>();
 
     public OpeningScene() {
 
@@ -94,6 +99,15 @@ public class OpeningScene {
 
         VBox buttons = new VBox();
         VBox settingsBox = new VBox();
+        HBox saveHBox = new HBox();
+        VBox saveVBox = new VBox();
+
+        /*
+            Buttons for save games
+        */
+
+
+
         buttons.setId("buttons");
         root.setCenter(buttons);
         buttons.setMaxWidth(Game.WIDTH / 4);
@@ -132,9 +146,79 @@ public class OpeningScene {
         enter.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         enter.setOnMouseClicked(event -> {
             AudioHandler.stopBackgroundAudio();
+            SaveGame.toLoad = false;
+            MapScene.player = new Player(MapScene.graphics, 0);
             Game.setScene("GameMap");
         });
         enter.setOnMouseEntered(new ButtonHover(enter));
+
+        Label saveTitle = new Label ("LOAD SAVE GAME");
+
+        Button save1 = new Button("NO DATA");
+
+
+        Button save2 = new Button("NO DATA");
+        Button save3 = new Button("NO DATA");
+
+        saveHBox.getChildren().addAll(save1, save2, save3);
+        saveHBox.setAlignment(Pos.CENTER);
+        saveHBox.setPadding(new Insets(100,0,0,0));
+        saveHBox.setSpacing(50);
+        saveVBox.getChildren().addAll(saveTitle, saveHBox);
+        saveVBox.setAlignment(Pos.CENTER);
+        saveVBox.setPadding(new Insets(0,0,300,0));
+
+
+        Button load = new Button("Load Game");
+        load.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        load.setOnMouseEntered(new ButtonHover(load));
+        load.setOnMouseClicked(l -> {
+            AudioHandler.playAudio("menuhit.wav");
+            buttons.setVisible(false);
+            title.setVisible(false);
+            members.setVisible(false);
+
+            GetFilePath.getFilePaths("assets/data/", saveFiles, saveNames);
+
+            for(int i = 1; i < (saveFiles.size() + 1); i++){
+                if(i == 1){
+                    save1.setText("GAME 1");
+                    save1.setOnMouseClicked(s1 -> {
+                        SaveGame.pathName = saveFiles.get(0);
+                        SaveGame.toLoad = true;
+                        MapScene.player = new Player(MapScene.graphics, 0);
+                        Game.setScene("GameMap");
+
+                    });
+                }
+                if(i == 2){
+                    save2.setText("GAME 2");
+                    save2.setOnMouseClicked(s2 -> {
+                        SaveGame.pathName = saveFiles.get(1);
+                        SaveGame.toLoad = true;
+                        MapScene.player = new Player(MapScene.graphics, 0);
+                        Game.setScene("GameMap");
+
+                    });
+                }
+                if(i == 3){
+                    save3.setText("GAME 3");
+                    save3.setOnMouseClicked(s3 -> {
+                        SaveGame.pathName = saveFiles.get(2);
+                        SaveGame.toLoad = true;
+                        MapScene.player = new Player(MapScene.graphics, 0);
+                        Game.setScene("GameMap");
+
+                    });
+                }
+
+            }
+            saveVBox.setVisible(true);
+            root.setCenter(saveVBox );
+           /*AudioHandler.stopBackgroundAudio();
+            SaveGame.pathName = "assets/000.dat";*/
+
+        });
 
         Button settings = new Button("Settings");
         settings.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
@@ -156,7 +240,7 @@ public class OpeningScene {
 
 
         settingsBox.getChildren().addAll(volLabel, volPlus, volMinus, back);
-        buttons.getChildren().addAll(enter, settings);
+        buttons.getChildren().addAll(enter, load, settings);
 
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
         scene.getStylesheets().add("styles/opening.css");

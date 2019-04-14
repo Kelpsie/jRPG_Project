@@ -15,10 +15,10 @@ public class GetFilePath {
             files = new File(parentDirectory).listFiles();
             if(files != null) {
                 for(File file: files) {
-                    String fileName = "assets/audio/";
+                    String fileName = parentDirectory;
                     fileName += file.getName();
                     nameList.add(file.getName());
-                    System.out.println(fileName);
+                    //System.out.println(fileName);
                     fileList.add(fileName);
                 }
             }
@@ -28,5 +28,7 @@ public class GetFilePath {
         }
 
     }
+
+
 
 }

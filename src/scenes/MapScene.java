@@ -21,6 +21,7 @@ import loader.SaveGame;
 import main.Game;
 import main.GameLoop;
 import models.*;
+import skills.Heal;
 import skills.RangedAttack;
 
 import java.io.FileNotFoundException;
@@ -39,7 +40,7 @@ public class MapScene extends GameScene {
 
     public static StackPane root;
     Canvas canvas;
-    GraphicsContext graphics;
+    public static GraphicsContext graphics;
 
     public static Player player;
     public static GameMap map;
@@ -66,8 +67,6 @@ public class MapScene extends GameScene {
      * Main GameMap Layer -> static image
      * Animated Tiles Layer -> tile map
      * Sprites -> tile map
-     * Foreground Layer -> static image
-     * Lighting Layer -> layer with alpha
      *
      */
 
@@ -157,9 +156,8 @@ public class MapScene extends GameScene {
         enemiesToSpawn.clear();
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
         for (Spawner s : map.spawners) s.update();
-        Player.regenHealth();
         MainHUD.health.setText(Integer.toString(Player.hp));
-        SaveGame.writeData();
+        //SaveGame.writeData();
     }
 
     private void addNotification(String s) {
@@ -206,11 +204,7 @@ public class MapScene extends GameScene {
         bossRenderID.add(141);
         bossRenderID.add(143);
         bossRenderID.add(145);
-        try {
-            SaveGame.readData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         root = new StackPane();
 
         MainHUD.initHUD();
@@ -227,7 +221,7 @@ public class MapScene extends GameScene {
 
         canvas.requestFocus();
         graphics = canvas.getGraphicsContext2D();
-        player = new Player(graphics, 0);
+        //player = new Player(graphics, 0);
 
         ImageLoader.readTileMap("assets/goodset.png", tiles, 32);
         mapImage = ImageLoader.loadImage("file:assets/untitled.png");
@@ -236,9 +230,9 @@ public class MapScene extends GameScene {
             map = new GameMap("untitled.tmx");
         } catch (Exception e) { e.printStackTrace();}
 
-        int[] mapPos = mapToScreen(Player.posX, Player.posY);
+        /*int[] mapPos = mapToScreen(Player.posX, Player.posY);
         mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
-        mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];
+        mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];*/
 
 
         notificationQueue = new LinkedList<>();
@@ -287,7 +281,7 @@ public class MapScene extends GameScene {
 
         skills = new HashMap<>();
         skills.put("Ranged Attack", new RangedAttack());
-
+        skills.put("Heal", new Heal());
     }
 
 

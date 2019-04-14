@@ -31,11 +31,7 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        try {
-            SaveGame.createFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         AudioHandler.initAudiohandler();
         Font.loadFont(getClass().getResourceAsStream("/styles/VT220-mod.ttf"), 16);
         Font.loadFont(getClass().getResourceAsStream("/styles/PressStart2P-Regular.ttf"), 16);

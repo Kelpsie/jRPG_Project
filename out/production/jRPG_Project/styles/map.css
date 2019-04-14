@@ -1,7 +1,3 @@
-@font-face {
-    src: url('PressStart2P-Regular.ttf');
-}
-
 .notification {
     -fx-label-padding: 2px 8px;
     -fx-text-fill: #ffffff;
@@ -26,44 +22,44 @@
 }
 
 .skill1 {
-    -fx-background-image: url("ranged.png");
+    -fx-background-image: url("rangeAttack.png");
     -fx-backgorund-color: transparent;
 }
 
-.skill1:armed {
-    -fx-background-image: url("ranged_cooldown.png");
+.skill1:selected {
+    -fx-background-image: url("rangeAttackActive.png");
     -fx-backgorund-color: transparent;
 }
 
 .skill2 {
-    -fx-background-image: url("ranged.png");
+    -fx-background-image: url("heal.png");
     -fx-backgorund-color: transparent;
 }
 
-.skill2:armed {
-    -fx-background-image: url("ranged_cooldown.png");
+.skill2:selected {
+    -fx-background-image: url("healActive.png");
     -fx-backgorund-color: transparent;
 }
 
 
 .skill3 {
-    -fx-background-image: url("ranged.png");
+    -fx-background-image: url("teleport.png");
     -fx-backgorund-color: transparent;
 }
 
-.skill3:armed {
-    -fx-background-image: url("ranged_cooldown.png");
+.skill3:selected {
+    -fx-background-image: url("teleportActive.png");
     -fx-backgorund-color: transparent;
 }
 
 
 .tree {
-    -fx-background-image: url("skilltree.png");
+    -fx-background-image: url("skill.png");
     -fx-backgorund-color: transparent;
 }
 
 .tree:armed {
-    -fx-background-image: url("skilltree_select.png");
+    -fx-background-image: url("skillActive.png");
     -fx-background-color: transparent;
 }
 
@@ -77,8 +73,24 @@
     -fx-background-color: transparent;
 }
 
+
 .back:armed {
     -fx-background-image: url("backBtnArmed.png");
+    -fx-background-color: transparent;
+}
+
+.saveButton {
+    -fx-background-image: url("saveIcon.png");
+    -fx-background-color: transparent;
+}
+
+.saveButton:hover {
+    -fx-background-image: url("saveIconHover.png");
+    -fx-background-color: transparent;
+}
+
+.saveButton:armed {
+    -fx-background-image: url("saveIconArmed.png");
     -fx-background-color: transparent;
 }
 
@@ -127,4 +139,24 @@
 .add:armed {
     -fx-background-image: url("plusBtnArmed.png");
     -fx-background-color: transparent;
+}
+
+.saveGameButton {
+    -fx-font-size: 22px;
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-text-fill: #dddddd;
+}
+
+.saveGameButton:hover {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-size: 22px;
+    -fx-text-fill: #aaaaaa;
+}
+
+.saveTitle {
+    -fx-font-size: 22px;
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-text-fill: #dddddd;
 }

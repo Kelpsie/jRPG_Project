@@ -4,6 +4,8 @@ import HUD.MainHUD;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import loader.ImageLoader;
+import loader.SaveGame;
+
 import java.util.ArrayList;
 
 public class Player {
@@ -15,28 +17,31 @@ public class Player {
     private static ArrayList<Image> animations = new ArrayList<>();
     public static int animationCounter = 0;
     public static int charFrameNumber = 0;
-    public static int hp = 100;
-    public static int regenValue = 2;
+    public static int maxHP = 200;
+    public static int hp = 200;
     public static int xp = 0;
     public static int skillPoints = 0;
     public static int level = 1;
 
 
     public Player(GraphicsContext graphicsContext, int id){
+        try {
+            SaveGame.readData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.id = id;
         this.graphicsContext = graphicsContext;
         ImageLoader.readTileMap("assets/MainChar.png", animations, 32);
     }
-
-    public static void regenHealth(){
-        if (hp < 100){
-            hp += regenValue;
-            if ( hp > 100){
-                hp = 100;
+    public static void restoreHealth(int restoreValue){
+        if (hp < maxHP){
+            hp += restoreValue;
+            if ( hp > maxHP){
+                hp = maxHP;
             }
         }
     }
-
     public int getId() {
         return id;
     }

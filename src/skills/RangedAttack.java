@@ -1,10 +1,12 @@
 package skills;
 
+
 import models.Enemy;
 import models.Skill;
 import scenes.MapScene;
 
 public class RangedAttack extends Skill {
+
 
     public RangedAttack() {
         cooldown = 0;
@@ -47,6 +49,7 @@ public class RangedAttack extends Skill {
 
         e.takeDamage(damage());
         MapScene.notificationQueue.add("Dealt " + damage() + " damage." );
+
 
         turnsSinceUsed = 0;
     }

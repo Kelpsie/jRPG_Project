@@ -4,17 +4,24 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import loader.SaveGame;
 import models.Player;
 import scenes.MapScene;
+import skills.Heal;
 import skills.RangedAttack;
 
+import java.util.ArrayList;
+
 import static scenes.MapScene.notificationQueue;
+import static scenes.MapScene.root;
 
 public class MainHUD extends BorderPane {
 
@@ -31,10 +38,11 @@ public class MainHUD extends BorderPane {
     public static VBox BottomHUDVBox = new VBox();
 
     public static Label health = new Label(Integer.toString(Player.hp));
+    static Label saveLabel = new Label("SAVE GAME");
 
-    private static Button skill1 = new Button();
-    private static Button skill2 = new Button();
-    private static Button skill3 = new Button();
+    private static ToggleButton skill1 = new ToggleButton();
+    private static ToggleButton skill2 = new ToggleButton();
+    private static ToggleButton skill3 = new ToggleButton();
     private static Button tree = new Button();
 
     public static Rectangle xpBar = new Rectangle();
@@ -43,13 +51,17 @@ public class MainHUD extends BorderPane {
 
     public static BorderPane skillUpgrade = new BorderPane();
     private static VBox vSkillBox = new VBox();
+    private static VBox saveVBox = new VBox();
+    private static HBox saveHBox = new HBox();
     private static HBox s1hbox = new HBox();
     private static HBox s2hbox = new HBox();
     private static HBox s3hbox = new HBox();
+    private static HBox menuBar = new HBox();
 
     private static Button back = new Button();
+    private static Button saveGame = new Button();
     private static Label s1Label = new Label("Ranged Attack: lvl " + RangedAttack.level);
-    private static Label s2Label = new Label("Ranged Attack: lvl " + RangedAttack.level);
+    private static Label s2Label = new Label("Restore Health lvl " + RangedAttack.level);
     private static Label s3Label = new Label("Ranged Attack: lvl " + RangedAttack.level);
     private static Label skillPoints = new Label("Skill Points Avail: " + Player.skillPoints);
 
@@ -58,6 +70,8 @@ public class MainHUD extends BorderPane {
     private static Button s1AddPoint = new Button();
     private static Button s2AddPoint = new Button();
     private static Button s3AddPoint = new Button();
+
+    private static final ToggleGroup tg = new ToggleGroup();
 
 
     public static void initHUD(){
@@ -95,6 +109,11 @@ public class MainHUD extends BorderPane {
         s3AddPoint.setMinWidth(buttonSize);
         s3AddPoint.getStyleClass().add("add");
 
+        saveGame.setMinHeight(buttonSize);
+        saveGame.setMinWidth(buttonSize);
+        saveGame.getStyleClass().add("saveButton");
+
+
         s1AddPoint.setOnMouseClicked(event -> {
             if(Player.skillPoints > 0) {
                 RangedAttack.level += 1;
@@ -102,13 +121,97 @@ public class MainHUD extends BorderPane {
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
                 s1Label.setText("Ranged Attack: lvl " + RangedAttack.level);
             }
-            System.out.println(RangedAttack.level);
-            System.out.println(Player.skillPoints);
+
+        });
+
+        s2AddPoint.setOnMouseClicked(event -> {
+            if(Player.skillPoints > 0) {
+                Heal.level += 1;
+                Player.skillPoints -= 1;
+                skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
+                s2Label.setText("Restore Health lvl " + Heal.level);
+            }
+        });
+
+        /*
+            Here add blink level
+         */
+
+        s3AddPoint.setOnMouseClicked(event -> {
+            if(Player.skillPoints > 0) {
+                skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
+                s3Label.setText("Extra Skill lvl ");
+            }
+        });
+
+        Button game1 = new Button("GAME 1");
+        Button game2 = new Button("GAME 2");
+        Button game3 = new Button("GAME 3");
+        game1.getStyleClass().add("saveGameButton");
+        game2.getStyleClass().add("saveGameButton");
+        game3.getStyleClass().add("saveGameButton");
+
+        saveLabel.getStyleClass().add("saveTitle");
+
+        saveGame.setOnMouseClicked(saveEvent ->{
+            vSkillBox.setVisible(false);
+            skillUpgrade.setCenter(saveVBox);
+            saveVBox.setVisible(true);
+        });
+
+        game1.setOnMouseClicked(saveGame1Event ->{
+            if(MapScene.enemies.size() > 0){
+                saveHBox.setVisible(false);
+                skillUpgrade.setVisible(false);
+                notificationQueue.add("You can't save while there are enemies!");
+            } else{
+                SaveGame.pathName = "assets/data/000.dat";
+                SaveGame.writeData();
+                saveHBox.setVisible(false);
+                skillUpgrade.setVisible(false);
+                notificationQueue.add("Saved Game!");
+            }
+
+        });
+
+        game2.setOnMouseClicked(saveGame2Event ->{
+            if(MapScene.enemies.size() > 0){
+                saveHBox.setVisible(false);
+                skillUpgrade.setVisible(false);
+                notificationQueue.add("You can't save while there are enemies!");
+            } else{
+                SaveGame.pathName = "assets/data/001.dat";
+                SaveGame.writeData();
+                saveHBox.setVisible(false);
+                skillUpgrade.setVisible(false);
+                notificationQueue.add("Saved Game!");
+            }
+        });
+
+        game3.setOnMouseClicked(saveGame3Event ->{
+            if(MapScene.enemies.size() > 0){
+                saveHBox.setVisible(false);
+                skillUpgrade.setVisible(false);
+                notificationQueue.add("You can't save while there are enemies!");
+            } else{
+                SaveGame.pathName = "assets/data/002.dat";
+                SaveGame.writeData();
+                saveHBox.setVisible(false);
+                skillUpgrade.setVisible(false);
+                notificationQueue.add("Saved Game!");
+            }
         });
 
 
-
-        vSkillBox.getChildren().addAll(back, skillPoints, s1hbox, s2hbox, s3hbox);
+        menuBar.getChildren().addAll(back, saveGame);
+        saveHBox.getChildren().addAll(game1, game2, game3);
+        saveHBox.setPadding(new Insets(100,0,0,0));
+        saveHBox.setSpacing(50);
+        saveHBox.setAlignment(Pos.CENTER);
+        saveVBox.getChildren().addAll(saveLabel, saveHBox);
+        saveVBox.setAlignment(Pos.CENTER);
+        saveVBox.setPadding(new Insets(0,0,300,0));
+        vSkillBox.getChildren().addAll(menuBar, skillPoints, s1hbox, s2hbox, s3hbox);
         vSkillBox.setPadding(new Insets(32));
         vSkillBox.setSpacing(16);
 
@@ -145,27 +248,34 @@ public class MainHUD extends BorderPane {
         back.setMinHeight(buttonSize);
         back.setMinWidth(buttonSize);
 
-
+        skill1.setToggleGroup(tg);
+        skill2.setToggleGroup(tg);
+        skill3.setToggleGroup(tg);
 
         skill1.setOnMouseClicked(event -> {
             MapScene.currentSkill = "Ranged Attack";
             notificationQueue.add("Selected: " + MapScene.currentSkill);
+            root.requestFocus();
         });
         skill2.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Ranged Attack";
+            MapScene.currentSkill = "Heal";
             notificationQueue.add("Selected: " + MapScene.currentSkill);
+            root.requestFocus();
         });
         skill3.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Ranged Attack";
+            MapScene.currentSkill = "Blink";
             notificationQueue.add("Selected: " + MapScene.currentSkill);
+            root.requestFocus();
         });
 
         tree.setOnMouseClicked(event -> {
             skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
             s1Label.setText("Ranged Attack: lvl " + RangedAttack.level);
-            s2Label.setText("Ranged Attack: lvl " + RangedAttack.level);
-            s3Label.setText("Ranged Attack: lvl " + RangedAttack.level);
+            s2Label.setText("Restore Health lvl " + Heal.level);
+            s3Label.setText("Blink level " + RangedAttack.level);
             skillUpgrade.setVisible(true);
+            skillUpgrade.setCenter(vSkillBox);
+            System.out.println(RangedAttack.level);
         });
 
         back.setOnMouseClicked(event -> skillUpgrade.setVisible(false));
@@ -175,7 +285,6 @@ public class MainHUD extends BorderPane {
         BottomHUDVBox.getChildren().addAll(hb, hbLower);
         BottomHUDVBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        //can make button pressed / release using node.arm() / node.disarm(), can use for cool down timers in some way.
 
     }
 

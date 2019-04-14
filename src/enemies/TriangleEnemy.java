@@ -17,10 +17,10 @@ public class TriangleEnemy extends Enemy {
     public TriangleEnemy(int x, int y, int type, int xp_multi) {
         super("assets/" + files[type], 32, 10, x, y, xp[type]*xp_multi);
         switch (type) {
-            case 0: hp = 10; damage = 3; break;
-            case 1: hp = 20; damage = 9; break;
-            case 2: hp = 50; damage = 20; break;
-            case 3: hp = 100; damage = 48; break;
+            case 0: hp = 10; damage = 1; break;
+            case 1: hp = 20; damage = 6; break;
+            case 2: hp = 50; damage = 15; break;
+            case 3: hp = 100; damage = 30; break;
         }
     }
 
