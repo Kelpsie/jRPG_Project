@@ -3,7 +3,9 @@ package loader;
 import main.Game;
 import models.Player;
 import scenes.MapScene;
+import skills.Blink;
 import skills.Heal;
+import skills.MeleeAttack;
 import skills.RangedAttack;
 
 import java.io.*;
@@ -33,6 +35,8 @@ public class SaveGame {
         DefaultData.add(33);
         DefaultData.add(1);
         DefaultData.add(1);
+        DefaultData.add(1);
+        DefaultData.add(1);
         File file = new File(pathName);
         if(file.createNewFile()){
             System.out.println("save file does not currently exist | making save file");
@@ -55,8 +59,10 @@ public class SaveGame {
         SavedData.add(Player.xp);
         SavedData.add(Player.posX);
         SavedData.add(Player.posY);
-        SavedData.add(RangedAttack.level);
-        SavedData.add(Heal.level);
+        SavedData.add(MapScene.skills.get("Ranged Attack").level);
+        SavedData.add(MapScene.skills.get("Melee Attack").level);
+        SavedData.add(MapScene.skills.get("Heal").level);
+        SavedData.add(MapScene.skills.get("Blink").level);
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(pathName, false))) {
 
@@ -90,8 +96,10 @@ public class SaveGame {
             Player.xp = ReadData.get(4);
             Player.posX = ReadData.get(5);
             Player.posY = ReadData.get(6);
-            RangedAttack.level = ReadData.get(7);
-            Heal.level = ReadData.get(8);
+            MapScene.skills.get("Ranged Attack").level = ReadData.get(7);
+            MapScene.skills.get("Melee Attack").level = ReadData.get(8);
+            MapScene.skills.get("Heal").level = ReadData.get(9);
+            MapScene.skills.get("Blink").level = ReadData.get(10);
             System.out.println(Player.posX);
             System.out.println(Player.posY);
             //place the player on the map AFTER loading in the player position data

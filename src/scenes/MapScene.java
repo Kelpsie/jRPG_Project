@@ -21,7 +21,9 @@ import loader.SaveGame;
 import main.Game;
 import main.GameLoop;
 import models.*;
+import skills.Blink;
 import skills.Heal;
+import skills.MeleeAttack;
 import skills.RangedAttack;
 
 import java.io.FileNotFoundException;
@@ -55,7 +57,7 @@ public class MapScene extends GameScene {
 
     public static ArrayList<Enemy> enemies;
     public static ArrayList<Enemy> enemiesToSpawn;
-    static HashMap<String, Skill> skills;
+    public static HashMap<String, Skill> skills;
     public static String currentSkill = null;
 
     public static Random random = new Random();
@@ -158,6 +160,16 @@ public class MapScene extends GameScene {
         for (Spawner s : map.spawners) s.update();
         MainHUD.health.setText(Integer.toString(Player.hp));
         //SaveGame.writeData();
+    }
+
+    public static void movePlayer(int x, int y) {
+        if (walkable(x, y)) {
+            Player.posX = x;
+            Player.posY = y;
+
+            mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - Player.posX*map.tileSize;
+            mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - Player.posY*map.tileSize;
+        }
     }
 
     private void addNotification(String s) {
@@ -282,6 +294,8 @@ public class MapScene extends GameScene {
         skills = new HashMap<>();
         skills.put("Ranged Attack", new RangedAttack());
         skills.put("Heal", new Heal());
+        skills.put("Melee Attack", new MeleeAttack());
+        skills.put("Blink", new Blink());
     }
 
 

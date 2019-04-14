@@ -15,7 +15,9 @@ import javafx.scene.shape.Rectangle;
 import loader.SaveGame;
 import models.Player;
 import scenes.MapScene;
+import skills.Blink;
 import skills.Heal;
+import skills.MeleeAttack;
 import skills.RangedAttack;
 
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class MainHUD extends BorderPane {
     private static ToggleButton skill1 = new ToggleButton();
     private static ToggleButton skill2 = new ToggleButton();
     private static ToggleButton skill3 = new ToggleButton();
+    private static ToggleButton skill4 = new ToggleButton();
     private static Button tree = new Button();
 
     public static Rectangle xpBar = new Rectangle();
@@ -56,13 +59,15 @@ public class MainHUD extends BorderPane {
     private static HBox s1hbox = new HBox();
     private static HBox s2hbox = new HBox();
     private static HBox s3hbox = new HBox();
+    private static HBox s4hbox = new HBox();
     private static HBox menuBar = new HBox();
 
     private static Button back = new Button();
     private static Button saveGame = new Button();
-    private static Label s1Label = new Label("Ranged Attack: lvl " + RangedAttack.level);
-    private static Label s2Label = new Label("Restore Health lvl " + RangedAttack.level);
-    private static Label s3Label = new Label("Ranged Attack: lvl " + RangedAttack.level);
+    private static Label s1Label = new Label("Ranged Attack: lvl 1");
+    private static Label s2Label = new Label("Melee Attack lvl 1");
+    private static Label s3Label = new Label("Restore Health: lvl 1");
+    private static Label s4Label = new Label("Blink: lvl 1");
     private static Label skillPoints = new Label("Skill Points Avail: " + Player.skillPoints);
 
 
@@ -70,6 +75,7 @@ public class MainHUD extends BorderPane {
     private static Button s1AddPoint = new Button();
     private static Button s2AddPoint = new Button();
     private static Button s3AddPoint = new Button();
+    private static Button s4AddPoint = new Button();
 
     private static final ToggleGroup tg = new ToggleGroup();
 
@@ -84,18 +90,22 @@ public class MainHUD extends BorderPane {
         s1Label.getStyleClass().add("Skill1Label");
         s2Label.getStyleClass().add("Skill2Label");
         s3Label.getStyleClass().add("Skill3Label");
+        s4Label.getStyleClass().add("Skill3Label");
 
         s1Label.setMinWidth(384);
         s2Label.setMinWidth(384);
         s3Label.setMinWidth(384);
+        s4Label.setMinWidth(384);
 
         s1Label.setPadding(new Insets(20,0,0,0));
         s2Label.setPadding(new Insets(20,0,0,0));
         s3Label.setPadding(new Insets(20,0,0,0));
+        s4Label.setPadding(new Insets(20,0,0,0));
 
         s1hbox.getChildren().addAll(s1Label, s1AddPoint);
         s2hbox.getChildren().addAll(s2Label, s2AddPoint);
         s3hbox.getChildren().addAll(s3Label, s3AddPoint);
+        s4hbox.getChildren().addAll(s4Label, s4AddPoint);
 
         s1AddPoint.setMinHeight(buttonSize);
         s1AddPoint.setMinWidth(buttonSize);
@@ -109,6 +119,10 @@ public class MainHUD extends BorderPane {
         s3AddPoint.setMinWidth(buttonSize);
         s3AddPoint.getStyleClass().add("add");
 
+        s4AddPoint.setMinHeight(buttonSize);
+        s4AddPoint.setMinWidth(buttonSize);
+        s4AddPoint.getStyleClass().add("add");
+
         saveGame.setMinHeight(buttonSize);
         saveGame.setMinWidth(buttonSize);
         saveGame.getStyleClass().add("saveButton");
@@ -116,29 +130,32 @@ public class MainHUD extends BorderPane {
 
         s1AddPoint.setOnMouseClicked(event -> {
             if(Player.skillPoints > 0) {
-                RangedAttack.level += 1;
+                MapScene.skills.get("Ranged Attack").level += 1;
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s1Label.setText("Ranged Attack: lvl " + RangedAttack.level);
+                s1Label.setText("Ranged Attack: lvl " + MapScene.skills.get("Ranged Attack").level);
             }
-
         });
-
         s2AddPoint.setOnMouseClicked(event -> {
             if(Player.skillPoints > 0) {
-                Heal.level += 1;
+                MapScene.skills.get("Melee Attack").level += 1;
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s2Label.setText("Restore Health lvl " + Heal.level);
+                s1Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
             }
         });
-
-        /*
-            Here add blink level
-         */
-
         s3AddPoint.setOnMouseClicked(event -> {
             if(Player.skillPoints > 0) {
+                MapScene.skills.get("Heal").level += 1;
+                Player.skillPoints -= 1;
+                skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
+                s2Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
+            }
+        });
+        s4AddPoint.setOnMouseClicked(event -> {
+            if(Player.skillPoints > 0) {
+                MapScene.skills.get("Blink").level += 1;
+                Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
                 s3Label.setText("Extra Skill lvl ");
             }
@@ -211,7 +228,7 @@ public class MainHUD extends BorderPane {
         saveVBox.getChildren().addAll(saveLabel, saveHBox);
         saveVBox.setAlignment(Pos.CENTER);
         saveVBox.setPadding(new Insets(0,0,300,0));
-        vSkillBox.getChildren().addAll(menuBar, skillPoints, s1hbox, s2hbox, s3hbox);
+        vSkillBox.getChildren().addAll(menuBar, skillPoints, s1hbox, s2hbox, s3hbox, s4hbox);
         vSkillBox.setPadding(new Insets(32));
         vSkillBox.setSpacing(16);
 
@@ -240,6 +257,10 @@ public class MainHUD extends BorderPane {
         skill3.setMinHeight(buttonSize);
         skill3.setMinWidth(buttonSize);
 
+        skill4.getStyleClass().add("skill4");
+        skill4.setMinHeight(buttonSize);
+        skill4.setMinWidth(buttonSize);
+
         tree.getStyleClass().add("tree");
         tree.setMinHeight(buttonSize);
         tree.setMinWidth(buttonSize);
@@ -251,6 +272,7 @@ public class MainHUD extends BorderPane {
         skill1.setToggleGroup(tg);
         skill2.setToggleGroup(tg);
         skill3.setToggleGroup(tg);
+        skill4.setToggleGroup(tg);
 
         skill1.setOnMouseClicked(event -> {
             MapScene.currentSkill = "Ranged Attack";
@@ -258,11 +280,16 @@ public class MainHUD extends BorderPane {
             root.requestFocus();
         });
         skill2.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Heal";
+            MapScene.currentSkill = "Melee Attack";
             notificationQueue.add("Selected: " + MapScene.currentSkill);
             root.requestFocus();
         });
         skill3.setOnMouseClicked(event -> {
+            MapScene.currentSkill = "Heal";
+            notificationQueue.add("Selected: " + MapScene.currentSkill);
+            root.requestFocus();
+        });
+        skill4.setOnMouseClicked(event -> {
             MapScene.currentSkill = "Blink";
             notificationQueue.add("Selected: " + MapScene.currentSkill);
             root.requestFocus();
@@ -270,17 +297,18 @@ public class MainHUD extends BorderPane {
 
         tree.setOnMouseClicked(event -> {
             skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-            s1Label.setText("Ranged Attack: lvl " + RangedAttack.level);
-            s2Label.setText("Restore Health lvl " + Heal.level);
-            s3Label.setText("Blink level " + RangedAttack.level);
+            s1Label.setText("Ranged Attack: lvl " + MapScene.skills.get("Ranged Attack").level);
+            s2Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
+            s3Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
+            s4Label.setText("Blink lvl " + MapScene.skills.get("Blink").level);
             skillUpgrade.setVisible(true);
+            vSkillBox.setVisible(true);
             skillUpgrade.setCenter(vSkillBox);
-            System.out.println(RangedAttack.level);
         });
 
         back.setOnMouseClicked(event -> skillUpgrade.setVisible(false));
 
-        hb.getChildren().addAll(health, skill1, skill2, skill3, tree);
+        hb.getChildren().addAll(health, skill1, skill2, skill3, skill4, tree);
         hbLower.getChildren().add(xpBar);
         BottomHUDVBox.getChildren().addAll(hb, hbLower);
         BottomHUDVBox.setAlignment(Pos.BOTTOM_CENTER);
