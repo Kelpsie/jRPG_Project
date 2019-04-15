@@ -36,7 +36,6 @@ public class RangedAttack extends Skill {
         if (MapScene.distance(Player.posX, Player.posY, x, y) <= range()) {
             return true;
         }
-        System.out.println(MapScene.distance(Player.posX, Player.posY, x, y));
 
         MapScene.notificationQueue.add("Enemy out of range (" + range() + ")");
         return false;

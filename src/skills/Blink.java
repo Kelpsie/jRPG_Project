@@ -18,7 +18,6 @@ public class Blink extends Skill {
 
     @Override
     public boolean canUse(int x, int y) {
-        System.out.println(turnsSinceUsed + " " + cooldown);
         if (turnsSinceUsed < cooldown) {
             MapScene.notificationQueue.add("Blink on cooldown");
             return false;

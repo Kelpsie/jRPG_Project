@@ -1,9 +1,6 @@
 package models;
 
-import enemies.CircleEnemy;
-import enemies.PentagonEnemy;
-import enemies.SquareEnemy;
-import enemies.TriangleEnemy;
+import enemies.*;
 import scenes.MapScene;
 
 public class Spawner {
@@ -38,6 +35,7 @@ public class Spawner {
             case "D": MapScene.spawnEnemy(new CircleEnemy(x, y, 1, xp_multi)); break;
             case "E": MapScene.spawnEnemy(new CircleEnemy(x, y, 2, xp_multi)); break;
             case "F": MapScene.spawnEnemy(new CircleEnemy(x, y, 3, xp_multi)); break;
+            case "Z": MapScene.spawnEnemy(new Boss(x, y)); break;
         }
     }
 
@@ -59,8 +57,11 @@ public class Spawner {
                 // Try a bunch of times, since we want the enemies to always spawn
                 while (tries < 100 && !spawned) {
                     tries++;
-                    int eX = MapScene.random.nextInt(spawnRadius*2) + (x - spawnRadius);
-                    int eY = MapScene.random.nextInt(spawnRadius*2) + (y - spawnRadius);
+                    int eX = x, eY = y;
+                    if (spawnRadius > 0) {
+                        eX = MapScene.random.nextInt(spawnRadius * 2) + (x - spawnRadius);
+                        eY = MapScene.random.nextInt(spawnRadius * 2) + (y - spawnRadius);
+                    }
                     if (!MapScene.walkable(eX, eY))
                         continue;
                     spawn(eX, eY, eString, 1);

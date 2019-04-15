@@ -1,6 +1,7 @@
 package scenes;
 
 import HUD.MainHUD;
+import enemies.Boss;
 import enemies.SquareEnemy;
 import javafx.animation.*;
 import javafx.geometry.Pos;
@@ -293,7 +294,6 @@ public class MapScene extends GameScene {
         canvas.setOnMouseClicked(event -> {
             root.requestFocus();
             int[] pos = screenToMap((int)event.getSceneX(), (int)event.getSceneY());
-            //for (Enemy e: enemies) if (e.posX == pos[0] && e.posY == pos[1]) e.move(new Random().nextInt(4));
             if (playerTurn) {
                 if (currentSkill != null) {
                     if (skills.get(currentSkill).canUse(pos[0], pos[1])) {
