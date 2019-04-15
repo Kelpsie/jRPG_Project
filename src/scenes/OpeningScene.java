@@ -114,9 +114,10 @@ public class OpeningScene {
         settingsBox.setMaxWidth(Game.WIDTH / 4);
 
         Label volLabel = new Label("Volume " + (Math.round((AudioHandler.volume*100)) + "%" ));
-
+        volLabel.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);
 
         Button volPlus = new Button("+");
+        volPlus.setOnMouseEntered(new ButtonHover(volPlus));
         volPlus.setOnMouseClicked(volUp -> {
             AudioHandler.increaseVolumeLevel();
             volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
@@ -124,6 +125,7 @@ public class OpeningScene {
         });
 
         Button volMinus = new Button("-");
+        volMinus.setOnMouseEntered(new ButtonHover(volMinus));
         volMinus.setOnMouseClicked(volDown -> {
             AudioHandler.decreaseVolumeLevel();
             volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
@@ -132,11 +134,24 @@ public class OpeningScene {
 
         Button back = new Button("back");
         back.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        back.setOnMouseEntered(new ButtonHover(back));
         back.setOnMouseClicked(backEvent -> {
             buttons.setVisible(true);
             title.setVisible(true);
             members.setVisible(true);
             settingsBox.setVisible(false);
+            saveVBox.setVisible(false);
+            root.setCenter(buttons);
+        });
+
+        Button back2 = new Button("back");
+        back2.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        back2.setOnMouseEntered(new ButtonHover(back2));
+        back2.setOnMouseClicked(backEvent -> {
+            buttons.setVisible(true);
+            title.setVisible(true);
+            members.setVisible(true);
+            saveVBox.setVisible(false);
             root.setCenter(buttons);
         });
 
@@ -164,9 +179,10 @@ public class OpeningScene {
         saveHBox.setAlignment(Pos.CENTER);
         saveHBox.setPadding(new Insets(100,0,0,0));
         saveHBox.setSpacing(50);
-        saveVBox.getChildren().addAll(saveTitle, saveHBox);
+        saveVBox.getChildren().addAll(saveTitle, saveHBox, back2);
         saveVBox.setAlignment(Pos.CENTER);
         saveVBox.setPadding(new Insets(0,0,300,0));
+        saveVBox.setSpacing(50);
 
 
         Button load = new Button("Load Game");
@@ -182,8 +198,10 @@ public class OpeningScene {
 
             for(int i = 1; i < (saveFiles.size() + 1); i++){
                 if(i == 1){
+                    save1.setOnMouseEntered(new ButtonHover(save1));
                     save1.setText("GAME 1");
                     save1.setOnMouseClicked(s1 -> {
+                        AudioHandler.playAudio("menuhit.wav");
                         SaveGame.pathName = saveFiles.get(0);
                         SaveGame.toLoad = true;
                         MapScene.player = new Player(MapScene.graphics, 0);
@@ -192,8 +210,10 @@ public class OpeningScene {
                     });
                 }
                 if(i == 2){
+                    save2.setOnMouseEntered(new ButtonHover(save2));
                     save2.setText("GAME 2");
                     save2.setOnMouseClicked(s2 -> {
+                        AudioHandler.playAudio("menuhit.wav");
                         SaveGame.pathName = saveFiles.get(1);
                         SaveGame.toLoad = true;
                         MapScene.player = new Player(MapScene.graphics, 0);
@@ -202,8 +222,10 @@ public class OpeningScene {
                     });
                 }
                 if(i == 3){
+                    save3.setOnMouseEntered(new ButtonHover(save3));
                     save3.setText("GAME 3");
                     save3.setOnMouseClicked(s3 -> {
+                        AudioHandler.playAudio("menuhit.wav");
                         SaveGame.pathName = saveFiles.get(2);
                         SaveGame.toLoad = true;
                         MapScene.player = new Player(MapScene.graphics, 0);
@@ -264,7 +286,7 @@ public class OpeningScene {
             // I have no idea why already being at the location you're
             // pathing to breaks this so hard, but here's a workaround
             if ((Math.abs(player.getTranslateX() - x) < 12) &&
-                (Math.abs(player.getTranslateY() - y) < 12))
+                    (Math.abs(player.getTranslateY() - y) < 12))
                 return;
 
             PathTransition movePlayer = new PathTransition();

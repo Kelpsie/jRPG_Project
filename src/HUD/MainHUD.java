@@ -39,14 +39,15 @@ public class MainHUD extends BorderPane {
     private static HBox hbLower = new HBox();
     public static VBox BottomHUDVBox = new VBox();
 
-    public static Label health = new Label(Integer.toString(Player.hp));
+    public static Label health = new Label("HP:" + Player.hp);
+    public static Label xp = new Label("XP: " + Player.xp);
     static Label saveLabel = new Label("SAVE GAME");
 
-    private static ToggleButton skill1 = new ToggleButton();
-    private static ToggleButton skill2 = new ToggleButton();
-    private static ToggleButton skill3 = new ToggleButton();
-    private static ToggleButton skill4 = new ToggleButton();
-    private static Button tree = new Button();
+    public static ToggleButton skill1 = new ToggleButton();
+    public static ToggleButton skill2 = new ToggleButton();
+    public static Button skill3 = new Button();
+    public static ToggleButton skill4 = new ToggleButton();
+    public static Button tree = new Button();
 
     public static Rectangle xpBar = new Rectangle();
 
@@ -54,6 +55,7 @@ public class MainHUD extends BorderPane {
 
     public static BorderPane skillUpgrade = new BorderPane();
     private static VBox vSkillBox = new VBox();
+    private static VBox bottomLabelVBox = new VBox();
     private static VBox saveVBox = new VBox();
     private static HBox saveHBox = new HBox();
     private static HBox s1hbox = new HBox();
@@ -82,7 +84,9 @@ public class MainHUD extends BorderPane {
 
     public static void initHUD(){
 
-        health.setMinWidth(128);
+        health.setPrefSize(128, 32);
+        xp.setPrefSize(128, 32);
+        xp.getStyleClass().add("xpLabel");
         xpBar.setFill(Color.GREEN);
         xpBar.setWidth(0);
         xpBar.setHeight(24);
@@ -141,15 +145,16 @@ public class MainHUD extends BorderPane {
                 MapScene.skills.get("Melee Attack").level += 1;
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s1Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
+                s2Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
             }
         });
         s3AddPoint.setOnMouseClicked(event -> {
             if(Player.skillPoints > 0) {
                 MapScene.skills.get("Heal").level += 1;
+                System.out.println(MapScene.skills.get("Heal").level);
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s2Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
+                s3Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
             }
         });
         s4AddPoint.setOnMouseClicked(event -> {
@@ -157,7 +162,7 @@ public class MainHUD extends BorderPane {
                 MapScene.skills.get("Blink").level += 1;
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s3Label.setText("Extra Skill lvl ");
+                s4Label.setText("Blink lvl " + MapScene.skills.get("Blink").level);
             }
         });
 
@@ -172,18 +177,22 @@ public class MainHUD extends BorderPane {
 
         saveGame.setOnMouseClicked(saveEvent ->{
             vSkillBox.setVisible(false);
-            skillUpgrade.setCenter(saveVBox);
             saveVBox.setVisible(true);
+            saveHBox.setVisible(true);
+            skillUpgrade.setCenter(saveVBox);
+
         });
 
         game1.setOnMouseClicked(saveGame1Event ->{
             if(MapScene.enemies.size() > 0){
+                saveVBox.setVisible(false);
                 saveHBox.setVisible(false);
                 skillUpgrade.setVisible(false);
                 notificationQueue.add("You can't save while there are enemies!");
             } else{
                 SaveGame.pathName = "assets/data/000.dat";
                 SaveGame.writeData();
+                saveVBox.setVisible(false);
                 saveHBox.setVisible(false);
                 skillUpgrade.setVisible(false);
                 notificationQueue.add("Saved Game!");
@@ -193,13 +202,14 @@ public class MainHUD extends BorderPane {
 
         game2.setOnMouseClicked(saveGame2Event ->{
             if(MapScene.enemies.size() > 0){
+                saveVBox.setVisible(false);
                 saveHBox.setVisible(false);
                 skillUpgrade.setVisible(false);
                 notificationQueue.add("You can't save while there are enemies!");
             } else{
                 SaveGame.pathName = "assets/data/001.dat";
                 SaveGame.writeData();
-                saveHBox.setVisible(false);
+                saveVBox.setVisible(false);
                 skillUpgrade.setVisible(false);
                 notificationQueue.add("Saved Game!");
             }
@@ -207,13 +217,13 @@ public class MainHUD extends BorderPane {
 
         game3.setOnMouseClicked(saveGame3Event ->{
             if(MapScene.enemies.size() > 0){
-                saveHBox.setVisible(false);
+                saveVBox.setVisible(false);
                 skillUpgrade.setVisible(false);
                 notificationQueue.add("You can't save while there are enemies!");
             } else{
                 SaveGame.pathName = "assets/data/002.dat";
                 SaveGame.writeData();
-                saveHBox.setVisible(false);
+                saveVBox.setVisible(false);
                 skillUpgrade.setVisible(false);
                 notificationQueue.add("Saved Game!");
             }
@@ -271,44 +281,69 @@ public class MainHUD extends BorderPane {
 
         skill1.setToggleGroup(tg);
         skill2.setToggleGroup(tg);
-        skill3.setToggleGroup(tg);
         skill4.setToggleGroup(tg);
 
-        skill1.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Ranged Attack";
-            notificationQueue.add("Selected: " + MapScene.currentSkill);
+        skill1.setOnAction(event -> {
+            if(skill1.isSelected()){
+                MapScene.currentSkill = "Ranged Attack";
+                notificationQueue.add("Selected: " + MapScene.currentSkill);
+                root.requestFocus();
+            } else {
+                MapScene.currentSkill = null;
+                notificationQueue.add("Selected: " + MapScene.currentSkill);
+                root.requestFocus();
+            }
+
+        });
+        skill2.setOnAction(event -> {
+            if(skill2.isSelected()) {
+                MapScene.currentSkill = "Melee Attack";
+                notificationQueue.add("Selected: " + MapScene.currentSkill);
+                root.requestFocus();
+            } else {
+                MapScene.currentSkill = null;
+                notificationQueue.add("Selected: " + MapScene.currentSkill);
+                root.requestFocus();
+            }
+        });
+        skill3.setOnAction(event -> {
+            Heal.use();
             root.requestFocus();
         });
-        skill2.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Melee Attack";
-            notificationQueue.add("Selected: " + MapScene.currentSkill);
-            root.requestFocus();
-        });
-        skill3.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Heal";
-            notificationQueue.add("Selected: " + MapScene.currentSkill);
-            root.requestFocus();
-        });
-        skill4.setOnMouseClicked(event -> {
-            MapScene.currentSkill = "Blink";
-            notificationQueue.add("Selected: " + MapScene.currentSkill);
-            root.requestFocus();
+        skill4.setOnAction(event -> {
+            if(skill4.isSelected()){
+                MapScene.currentSkill = "Blink";
+                notificationQueue.add("Selected: " + MapScene.currentSkill);
+                root.requestFocus();
+            } else {
+                MapScene.currentSkill = null;
+                notificationQueue.add("Selected: " + MapScene.currentSkill);
+                root.requestFocus();
+            }
+
         });
 
-        tree.setOnMouseClicked(event -> {
-            skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-            s1Label.setText("Ranged Attack: lvl " + MapScene.skills.get("Ranged Attack").level);
-            s2Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
-            s3Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
-            s4Label.setText("Blink lvl " + MapScene.skills.get("Blink").level);
-            skillUpgrade.setVisible(true);
-            vSkillBox.setVisible(true);
-            skillUpgrade.setCenter(vSkillBox);
+        tree.setOnAction(event -> {
+            if(!MainHUD.skillUpgrade.isVisible()){
+                skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
+                s1Label.setText("Ranged Attack: lvl " + MapScene.skills.get("Ranged Attack").level);
+                s2Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
+                s3Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
+                s4Label.setText("Blink lvl " + MapScene.skills.get("Blink").level);
+                skillUpgrade.setVisible(true);
+                vSkillBox.setVisible(true);
+                skillUpgrade.setCenter(vSkillBox);
+            } else {
+                skillUpgrade.setVisible(false);
+            }
+
         });
 
         back.setOnMouseClicked(event -> skillUpgrade.setVisible(false));
 
-        hb.getChildren().addAll(health, skill1, skill2, skill3, skill4, tree);
+        bottomLabelVBox.getChildren().addAll(health, xp);
+
+        hb.getChildren().addAll(bottomLabelVBox, skill1, skill2, skill3, skill4, tree);
         hbLower.getChildren().add(xpBar);
         BottomHUDVBox.getChildren().addAll(hb, hbLower);
         BottomHUDVBox.setAlignment(Pos.BOTTOM_CENTER);

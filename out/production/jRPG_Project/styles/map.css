@@ -18,80 +18,95 @@
 .health {
     -fx-text-fill: #FFFFFF;
     -fx-font-family: 'Press Start 2P', cursive;
-    -fx-font-size: 32px;
+    -fx-font-size: 20px;
+}
+
+.xpLabel {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-font-size: 20px;
 }
 
 .skill1 {
     -fx-background-image: url("rangeAttack.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .skill1:selected {
     -fx-background-image: url("rangeAttackActive.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .skill2 {
-    -fx-background-image: url("heal.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-image: url("rangeAttack.png");
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .skill2:selected {
-    -fx-background-image: url("healActive.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-image: url("rangeAttackActive.png");
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 
 .skill3 {
-    -fx-background-image: url("teleport.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-image: url("heal.png");
+    -fx-background-color: rgba(0,0,0,0);
 }
 
-.skill3:selected {
+.skill3:armed {
+    -fx-background-image: url("healActive.png");
+    -fx-background-color: rgba(0,0,0,0);
+}
+.skill4 {
+    -fx-background-image: url("teleport.png");
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.skill4:selected {
     -fx-background-image: url("teleportActive.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 
 .tree {
     -fx-background-image: url("skill.png");
-    -fx-backgorund-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .tree:armed {
     -fx-background-image: url("skillActive.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .back {
     -fx-background-image: url("backBtn.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .back:hover {
     -fx-background-image: url("backBtnHover.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 
 .back:armed {
     -fx-background-image: url("backBtnArmed.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .saveButton {
     -fx-background-image: url("saveIcon.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .saveButton:hover {
     -fx-background-image: url("saveIconHover.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .saveButton:armed {
     -fx-background-image: url("saveIconArmed.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .skills {
@@ -128,17 +143,17 @@
 
 .add {
     -fx-background-image: url("plusBtn.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .add:hover {
     -fx-background-image: url("plusBtnHover.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .add:armed {
     -fx-background-image: url("plusBtnArmed.png");
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(0,0,0,0);
 }
 
 .saveGameButton {

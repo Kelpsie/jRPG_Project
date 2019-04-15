@@ -158,7 +158,8 @@ public class MapScene extends GameScene {
         enemiesToSpawn.clear();
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
         for (Spawner s : map.spawners) s.update();
-        MainHUD.health.setText(Integer.toString(Player.hp));
+        MainHUD.health.setText("HP:" + Player.hp);
+        Heal.turnsSinceUsed ++;
         //SaveGame.writeData();
     }
 
@@ -256,6 +257,27 @@ public class MapScene extends GameScene {
         doNotes.setCycleCount(-1);
         doNotes.play();
 
+
+        root.setOnKeyPressed(HUDEvent -> {
+            switch(HUDEvent.getCode()){
+                case DIGIT1:
+                    MainHUD.skill1.fire();
+                    break;
+                case DIGIT2:
+                    MainHUD.skill2.fire();
+                    break;
+                case DIGIT3:
+                    MainHUD.skill3.fire();
+                    break;
+                case DIGIT4:
+                    MainHUD.skill4.fire();
+                    break;
+                case TAB:
+                    MainHUD.tree.fire();
+                    break;
+            }
+        });
+
         scene.setOnKeyPressed(event -> {
             root.requestFocus();
             if (!keys.contains(event.getCode()))
@@ -309,7 +331,8 @@ public class MapScene extends GameScene {
         // playerTurn is set to false when the player has done an action
         // playerTurn is false if any Enemy has work to do next frame
 
-        MainHUD.health.setText(Integer.toString(Player.hp));
+        MainHUD.health.setText("HP:" + Player.hp);
+        MainHUD.xp.setText("XP:" + Player.xp);
         if (!playerTurn) {
             pruneEnemies();
             if (enemies.size() <= 0) playerTurn = true;
@@ -337,10 +360,10 @@ public class MapScene extends GameScene {
                 }
             }
             if (mapDirX == 0 && mapDirY == 0 && playerTurn) {
-                if (keys.contains(KeyCode.UP))          mapDirY = 1;
-                else if (keys.contains(KeyCode.DOWN))   mapDirY = -1;
-                else if (keys.contains(KeyCode.LEFT))   mapDirX = 1;
-                else if (keys.contains(KeyCode.RIGHT))  mapDirX = -1;
+                if (keys.contains(KeyCode.W))          mapDirY = 1;
+                else if (keys.contains(KeyCode.S))   mapDirY = -1;
+                else if (keys.contains(KeyCode.A))   mapDirX = 1;
+                else if (keys.contains(KeyCode.D))  mapDirX = -1;
 
 
 

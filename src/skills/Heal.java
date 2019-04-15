@@ -7,10 +7,28 @@ import scenes.MapScene;
 
 public class Heal extends Skill {
 
-    public static int level = 1;
+    public static int cooldown = 1;
+    public static int turnsSinceUsed = 2;
 
     public Heal(){
-        cooldown = 0;
+
+    }
+
+    public static void use(){
+        if(turnsSinceUsed <= cooldown){
+            MapScene.notificationQueue.add("Heal on cooldown");
+        } else {
+            if(turnsSinceUsed > cooldown){
+                int restoreValue = Math.round(Math.abs(Player.maxHP/ 20) * MapScene.skills.get("Heal").level);
+                System.out.println(restoreValue);
+                Player.restoreHealth(restoreValue);
+                MapScene.notificationQueue.add("Healed " + restoreValue + " health");
+                AudioHandler.playAudio("heal.wav");
+                turnsSinceUsed = 0;
+            }
+
+        }
+
     }
 
     @Override
@@ -20,9 +38,6 @@ public class Heal extends Skill {
 
     @Override
     public void use(int x, int y) {
-        int restoreValue = (int) Math.round(Math.abs(Player.hp) / ((level / 2.6) * 20));
-        Player.restoreHealth(restoreValue);
-        MapScene.notificationQueue.add("Healed " + restoreValue + " health");
-        AudioHandler.playAudio("heal.wav");
+
     }
 }
