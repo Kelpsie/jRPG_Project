@@ -17,10 +17,10 @@ public class CircleEnemy extends Enemy {
     public CircleEnemy(int x, int y, int type, int xp_multi) {
         super("assets/" + files[type], 32, 10, x, y, xp[type]*xp_multi);
         switch (type) {
-            case 0: hp = 30; damage = 3; break;
-            case 1: hp = 55; damage = 9; break;
-            case 2: hp = 130; damage = 20; break;
-            case 3: hp = 300; damage = 43; break;
+            case 0: hp = 10; damage = 3; break;
+            case 1: hp = 20; damage = 9; break;
+            case 2: hp = 50; damage = 15; break;
+            case 3: hp = 150; damage = 43; break;
         }
     }
 

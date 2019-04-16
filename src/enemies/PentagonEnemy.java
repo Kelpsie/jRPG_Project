@@ -19,10 +19,10 @@ public class PentagonEnemy extends Enemy {
     public PentagonEnemy(int x, int y, int type, int xp_multi) {
         super("assets/" + files[type], 32, 10, x, y, xp[type]*xp_multi);
         switch (type) {
-            case 0: hp = 30; break;
-            case 1: hp = 55; break;
-            case 2: hp = 130; break;
-            case 3: hp = 310; break;
+            case 0: hp = 10; break;
+            case 1: hp = 20; break;
+            case 2: hp = 55; break;
+            case 3: hp = 150; break;
         }
         this.type = type;
     }

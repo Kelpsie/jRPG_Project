@@ -17,10 +17,10 @@ public class SquareEnemy extends Enemy {
     public SquareEnemy(int x, int y, int type, int xp_multi) {
         super("assets/" + files[type], 32, 10, x, y, xp[type]*xp_multi);
         switch (type) {
-            case 0: hp = 15; damage = 5; break;
-            case 1: hp = 40; damage = 15; break;
-            case 2: hp = 100; damage = 35; break;
-            case 3: hp = 250; damage = 60; break;
+            case 0: hp = 15; damage = 2; break;
+            case 1: hp = 30; damage = 10; break;
+            case 2: hp = 70; damage = 30; break;
+            case 3: hp = 150; damage = 60; break;
         }
     }
 
