@@ -31,6 +31,7 @@ public class Boss extends Enemy {
             GameOverScene.setText();
             Game.stage.setScene(MapScene.s.scene);
             AudioHandler.stopBackgroundAudio();
+            AudioHandler.playAudio("bossded.wav");
         }
 
     }
