@@ -1,6 +1,7 @@
 package scenes;
 
 import HUD.MainHUD;
+import audio.AudioHandler;
 import enemies.Boss;
 import enemies.SquareEnemy;
 import javafx.animation.*;
@@ -63,7 +64,13 @@ public class MapScene extends GameScene {
 
     public static Random random = new Random();
 
+    public static GameOverScene s;
 
+
+
+    public static void playAudio(){
+        AudioHandler.playBackgroundAudio("GameBG.mp3");
+    }
     /*
      * RENDER STACK
      *
@@ -159,7 +166,7 @@ public class MapScene extends GameScene {
         enemiesToSpawn.clear();
         for (Skill s : skills.values()) s.turnsSinceUsed += 1;
         for (Spawner s : map.spawners) s.update();
-        MainHUD.health.setText("HP:" + Player.hp);
+        MainHUD.health.setText("HP:" + Player.hp + "/" + Player.maxHP);
         Heal.turnsSinceUsed ++;
         //SaveGame.writeData();
     }
@@ -196,7 +203,7 @@ public class MapScene extends GameScene {
 
         SequentialTransition sq = new SequentialTransition(
                 fadeIn,
-                new PauseTransition(Duration.seconds(5)),
+                new PauseTransition(Duration.seconds(2)),
                 fadeOut
         );
         sq.setOnFinished(e -> root.getChildren().remove(notificationLabels.pop()));
@@ -230,12 +237,12 @@ public class MapScene extends GameScene {
 
         root.getChildren().addAll(MainHUD.BottomHUDVBox);
         root.getChildren().add(MainHUD.skillUpgrade);
+
+        //setPickOnBounds() removes the panes ability to detect events, only nodes
+        //on the pane can listen to events, used to prevent pane interference
         MainHUD.BottomHUDVBox.setPickOnBounds(false);
-
-
         canvas.requestFocus();
         graphics = canvas.getGraphicsContext2D();
-        //player = new Player(graphics, 0);
 
         ImageLoader.readTileMap("assets/goodset.png", tiles, 32);
         mapImage = ImageLoader.loadImage("file:assets/untitled.png");
@@ -244,16 +251,17 @@ public class MapScene extends GameScene {
             map = new GameMap("untitled.tmx");
         } catch (Exception e) { e.printStackTrace();}
 
-        /*int[] mapPos = mapToScreen(Player.posX, Player.posY);
-        mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
-        mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];*/
-
 
         notificationQueue = new LinkedList<>();
         notificationLabels = new LinkedList<>();
         Timeline doNotes = new Timeline(new KeyFrame(Duration.millis(250), e -> {
-            if (notificationQueue.size() > 0)
+            if (notificationQueue.size() > 0 && notificationQueue.size() < 10){
                 addNotification(notificationQueue.pop());
+            } else {
+                // dump notifications if it becomes overwhelmed
+                notificationQueue.clear();
+            }
+
         }));
         doNotes.setCycleCount(-1);
         doNotes.play();
@@ -299,7 +307,6 @@ public class MapScene extends GameScene {
                     if (skills.get(currentSkill).canUse(pos[0], pos[1])) {
                         skills.get(currentSkill).use(pos[0], pos[1]);
                         endPlayerTurn();
-                    } else {
                     }
                 } else {
                     notificationQueue.add("No Skill Selected!");
@@ -318,6 +325,8 @@ public class MapScene extends GameScene {
         skills.put("Heal", new Heal());
         skills.put("Melee Attack", new MeleeAttack());
         skills.put("Blink", new Blink());
+
+        s = new GameOverScene();
     }
 
 
@@ -331,8 +340,8 @@ public class MapScene extends GameScene {
         // playerTurn is set to false when the player has done an action
         // playerTurn is false if any Enemy has work to do next frame
 
-        MainHUD.health.setText("HP:" + Player.hp);
-        MainHUD.xp.setText("XP:" + Player.xp);
+        MainHUD.health.setText("HP:" + Player.hp + "/" + Player.maxHP);
+        MainHUD.xp.setText("XP:" + Player.xp + "/" + (int) Player.xpToNextLevel);
         if (!playerTurn) {
             pruneEnemies();
             if (enemies.size() <= 0) playerTurn = true;
@@ -378,24 +387,31 @@ public class MapScene extends GameScene {
 
     @Override
     public void draw() {
-        // Clear screen
-        graphics.fillRect(0, 0, scene.getWidth(), scene.getHeight());
+        if(Player.hp > 0){
+            // Clear screen
+            graphics.fillRect(0, 0, scene.getWidth(), scene.getHeight());
 
-        baseLayer(graphics, mapImage, mapX, mapY);
-        animatedLayer(graphics, tiles, 32, 1024, mapX,mapY);
-        player.draw(((Game.WIDTH / 2)/map.tileSize)*map.tileSize, ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize);
+            baseLayer(graphics, mapImage, mapX, mapY);
+            animatedLayer(graphics, tiles, 32, 1024, mapX,mapY);
+            player.draw(((Game.WIDTH / 2)/map.tileSize)*map.tileSize, ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize);
 
-        GameLoop.frameNumber++;
-        if(Math.abs(mapDirX) == 1 || Math.abs(mapDirY) == 1){
-            Player.charFrameNumber++;
-        } else {
-            if (Player.animationCounter > 0){
-                Player.animationCounter = 0;
+            GameLoop.frameNumber++;
+            if(Math.abs(mapDirX) == 1 || Math.abs(mapDirY) == 1){
+                Player.charFrameNumber++;
+            } else {
+                if (Player.animationCounter > 0){
+                    Player.animationCounter = 0;
+                }
             }
+
+            for (Enemy enemy : enemies) {
+                enemy.draw(graphics);
+            }
+        } else {
+            GameOverScene.setText();
+            Game.stage.setScene(s.scene);
+            AudioHandler.stopBackgroundAudio();
         }
 
-        for (Enemy enemy : enemies) {
-            enemy.draw(graphics);
-        }
     }
 }

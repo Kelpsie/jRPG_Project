@@ -34,3 +34,14 @@
 .button:hover {
     -fx-text-fill: #aaaaaa;
 }
+
+.GameOver {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-text-fill: #FF000080;
+
+}
+
+.END {
+    -fx-font-family: 'Press Start 2P', cursive;
+    -fx-text-fill: GREEN;
+}

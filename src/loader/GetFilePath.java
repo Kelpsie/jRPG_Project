@@ -18,7 +18,6 @@ public class GetFilePath {
                     String fileName = parentDirectory;
                     fileName += file.getName();
                     nameList.add(file.getName());
-                    //System.out.println(fileName);
                     fileList.add(fileName);
                 }
             }

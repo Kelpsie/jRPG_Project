@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="22">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="38">
  <tileset firstgid="1" source="goodset.tsx"/>
  <tileset firstgid="177" source="mask2.tsx"/>
  <layer id="1" name="Main Map" width="128" height="128">
@@ -271,7 +271,7 @@
    <properties>
     <property name="enemies" value="000011"/>
     <property name="enterRadius" type="int" value="4"/>
-    <property name="exitRadius" type="int" value="8"/>
+    <property name="exitRadius" type="int" value="10"/>
     <property name="spawnRadius" type="int" value="4"/>
    </properties>
    <point/>
@@ -296,7 +296,7 @@
   </object>
   <object id="4" x="640" y="704">
    <properties>
-    <property name="enemies" value="88"/>
+    <property name="enemies" value="1148"/>
     <property name="enterRadius" type="int" value="5"/>
     <property name="exitRadius" type="int" value="10"/>
     <property name="spawnRadius" type="int" value="3"/>
@@ -341,9 +341,9 @@
   </object>
   <object id="12" x="2848" y="256">
    <properties>
-    <property name="enemies" value="000001111244445CCCC889"/>
+    <property name="enemies" value="000011124445CCCC8"/>
     <property name="enterRadius" type="int" value="6"/>
-    <property name="exitRadius" type="int" value="12"/>
+    <property name="exitRadius" type="int" value="14"/>
     <property name="spawnRadius" type="int" value="8"/>
    </properties>
    <point/>
@@ -426,6 +426,150 @@
     <property name="enterRadius" type="int" value="14"/>
     <property name="exitRadius" type="int" value="20"/>
     <property name="spawnRadius" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="22" x="2848" y="800">
+   <properties>
+    <property name="enemies" value="1112455"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="23" x="3360" y="864">
+   <properties>
+    <property name="enemies" value="111122"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="24" x="3008" y="1312">
+   <properties>
+    <property name="enemies" value="112233CCDD"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="25" x="3168" y="1888">
+   <properties>
+    <property name="enemies" value="23356"/>
+    <property name="enterRadius" type="int" value="4"/>
+    <property name="exitRadius" type="int" value="10"/>
+    <property name="spawnRadius" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="26" x="2624" y="1984">
+   <properties>
+    <property name="enemies" value="23356"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="27" x="2944" y="2624">
+   <properties>
+    <property name="enemies" value="22223AA"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="28" x="3456" y="2688">
+   <properties>
+    <property name="enemies" value="333666DDDE"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="29" x="3424" y="3232">
+   <properties>
+    <property name="enemies" value="33333344"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="30" x="2784" y="3616">
+   <properties>
+    <property name="enemies" value="333667A"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="31" x="2848" y="3136">
+   <properties>
+    <property name="enemies" value="4444"/>
+    <property name="enterRadius" type="int" value="4"/>
+    <property name="exitRadius" type="int" value="7"/>
+    <property name="spawnRadius" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="32" x="1248" y="2752">
+   <properties>
+    <property name="enemies" value="111223677CCCC9A"/>
+    <property name="enterRadius" type="int" value="8"/>
+    <property name="exitRadius" type="int" value="14"/>
+    <property name="spawnRadius" type="int" value="10"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="33" x="2240" y="3360">
+   <properties>
+    <property name="enemies" value="356782"/>
+    <property name="enterRadius" type="int" value="7"/>
+    <property name="exitRadius" type="int" value="14"/>
+    <property name="spawnRadius" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="34" x="1504" y="3456">
+   <properties>
+    <property name="enemies" value="265437233225634"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="8"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="35" x="1120" y="3744">
+   <properties>
+    <property name="enemies" value="AAAA"/>
+    <property name="enterRadius" type="int" value="3"/>
+    <property name="exitRadius" type="int" value="7"/>
+    <property name="spawnRadius" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="36" x="1408" y="1632">
+   <properties>
+    <property name="enemies" value="2654372332B"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="37" x="672" y="1472">
+   <properties>
+    <property name="enemies" value="26543723329ACCD"/>
+    <property name="enterRadius" type="int" value="6"/>
+    <property name="exitRadius" type="int" value="12"/>
+    <property name="spawnRadius" type="int" value="6"/>
    </properties>
    <point/>
   </object>

@@ -12,8 +12,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static scenes.MapScene.map;
-import static scenes.MapScene.mapToScreen;
+import static scenes.MapScene.*;
 
 public class SaveGame {
 
@@ -24,6 +23,13 @@ public class SaveGame {
     static ArrayList<Integer> SavedData = new ArrayList<>();
     static ArrayList<Integer> ReadData = new ArrayList<>();
     static ArrayList<Integer> DefaultData = new ArrayList<>();
+
+
+    static void positionPlayer(){
+        int[] mapPos = mapToScreen(Player.posX, Player.posY);
+        MapScene.mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
+        MapScene.mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];
+    }
 
     public static void createFile() throws IOException {
         DefaultData.add(200);
@@ -81,37 +87,53 @@ public class SaveGame {
     public static void readData() throws FileNotFoundException {
 
         if(toLoad){
-            File saveGame = new File(pathName);
-            Scanner read = new Scanner(saveGame);
-            while (read.hasNextLine()){
-                ReadData.add(Integer.parseInt(read.nextLine()));
-            }
-            read.close();
-            System.out.println("Reading data...\n" + ReadData);
+            try{
+                File saveGame = new File(pathName);
+                Scanner read = new Scanner(saveGame);
+                while (read.hasNextLine()){
+                    ReadData.add(Integer.parseInt(read.nextLine()));
+                }
+                read.close();
+                System.out.println("Reading data...\n" + ReadData);
 
-            Player.hp = ReadData.get(0);
-            Player.maxHP = ReadData.get(1);
-            Player.level = ReadData.get(2);
-            Player.skillPoints = ReadData.get(3);
-            Player.xp = ReadData.get(4);
-            Player.posX = ReadData.get(5);
-            Player.posY = ReadData.get(6);
-            MapScene.skills.get("Ranged Attack").level = ReadData.get(7);
-            MapScene.skills.get("Melee Attack").level = ReadData.get(8);
-            MapScene.skills.get("Heal").level = ReadData.get(9);
-            MapScene.skills.get("Blink").level = ReadData.get(10);
-            System.out.println(Player.posX);
-            System.out.println(Player.posY);
-            //place the player on the map AFTER loading in the player position data
-            int[] mapPos = mapToScreen(Player.posX, Player.posY);
-            MapScene.mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
-            MapScene.mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];
+                Player.hp = ReadData.get(0);
+                Player.maxHP = ReadData.get(1);
+                Player.level = ReadData.get(2);
+                Player.skillPoints = ReadData.get(3);
+                Player.xp = ReadData.get(4);
+                Player.posX = ReadData.get(5);
+                Player.posY = ReadData.get(6);
+                MapScene.skills.get("Ranged Attack").level = ReadData.get(7);
+                MapScene.skills.get("Melee Attack").level = ReadData.get(8);
+                MapScene.skills.get("Heal").level = ReadData.get(9);
+                MapScene.skills.get("Blink").level = ReadData.get(10);
+
+                //place the player on the map AFTER loading in the player position data
+                positionPlayer();
+                ReadData.clear(); //clear data once loaded
+            } catch(Exception e ) {
+                Player.hp = 200;
+                Player.maxHP = 200;
+                Player.level = 1;
+                Player.skillPoints = 0;
+                Player.xp = 0;
+                Player.posX = 4;
+                Player.posY = 33;
+                MapScene.skills.get("Ranged Attack").level = 1;
+                MapScene.skills.get("Melee Attack").level = 1;
+                MapScene.skills.get("Heal").level = 1;
+                MapScene.skills.get("Blink").level = 1;
+                notificationQueue.add("Error Loading Save File!");
+                positionPlayer();
+                ReadData.clear(); //clear data once loaded
+            }
+
         } else {
             //if not read save data, default to starting location using default values in Player
-            int[] mapPos = mapToScreen(Player.posX, Player.posY);
-            MapScene.mapX = ((Game.WIDTH / 2)/map.tileSize)*map.tileSize - mapPos[0];
-            MapScene.mapY = ((Game.HEIGHT / 2)/map.tileSize)*map.tileSize - mapPos[1];
+            positionPlayer();
+            ReadData.clear();
         }
+
 
     }
 

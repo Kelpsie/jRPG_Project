@@ -3,7 +3,7 @@
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Press Start 2P', cursive;
     -fx-font-weight: bold;
-    -fx-font-size: 12px;
+    -fx-font-size: 10px;
     -fx-background-color: rgba(60, 60, 60, 0.7);
 }
 .notification .text {
@@ -15,16 +15,10 @@
     HUD STYLES
  */
 
-.health {
-    -fx-text-fill: #FFFFFF;
+.HUDlabel {
+    -fx-text-fill: YELLOW;
     -fx-font-family: 'Press Start 2P', cursive;
-    -fx-font-size: 20px;
-}
-
-.xpLabel {
-    -fx-text-fill: #FFFFFF;
-    -fx-font-family: 'Press Start 2P', cursive;
-    -fx-font-size: 20px;
+    -fx-font-size: 10px;
 }
 
 .skill1 {
@@ -175,3 +169,4 @@
     -fx-background-color: rgba(0,0,0,0);
     -fx-text-fill: #dddddd;
 }
+

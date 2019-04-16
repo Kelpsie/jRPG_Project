@@ -112,27 +112,29 @@ public class OpeningScene {
         root.setCenter(buttons);
         buttons.setMaxWidth(Game.WIDTH / 4);
         settingsBox.setMaxWidth(Game.WIDTH / 4);
+        settingsBox.setAlignment(Pos.CENTER);
+        settingsBox.setSpacing(30);
 
-        Label volLabel = new Label("Volume " + (Math.round((AudioHandler.volume*100)) + "%" ));
+        Label volLabel = new Label("VOLUME " + (Math.round((AudioHandler.volume*100)) + "%" ));
         volLabel.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);
 
-        Button volPlus = new Button("+");
+        Button volPlus = new Button("VOL UP");
         volPlus.setOnMouseEntered(new ButtonHover(volPlus));
         volPlus.setOnMouseClicked(volUp -> {
             AudioHandler.increaseVolumeLevel();
-            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
+            volLabel.setText("VOLUME " + (Math.round(AudioHandler.volume*100)) + "%");
             AudioHandler.playAudio("menuhit.wav");
         });
 
-        Button volMinus = new Button("-");
+        Button volMinus = new Button("VOL DOWN");
         volMinus.setOnMouseEntered(new ButtonHover(volMinus));
         volMinus.setOnMouseClicked(volDown -> {
             AudioHandler.decreaseVolumeLevel();
-            volLabel.setText("Volume " + (Math.round(AudioHandler.volume*100)) + "%");
+            volLabel.setText("VOLUME " + (Math.round(AudioHandler.volume*100)) + "%");
             AudioHandler.playAudio("menuhit.wav");
         });
 
-        Button back = new Button("back");
+        Button back = new Button("BACK");
         back.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         back.setOnMouseEntered(new ButtonHover(back));
         back.setOnMouseClicked(backEvent -> {
@@ -144,7 +146,7 @@ public class OpeningScene {
             root.setCenter(buttons);
         });
 
-        Button back2 = new Button("back");
+        Button back2 = new Button("BACK");
         back2.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         back2.setOnMouseEntered(new ButtonHover(back2));
         back2.setOnMouseClicked(backEvent -> {
@@ -157,13 +159,14 @@ public class OpeningScene {
 
 
 
-        enter = new Button("Enter Game");
+        enter = new Button("NEW GAME");
         enter.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         enter.setOnMouseClicked(event -> {
             AudioHandler.stopBackgroundAudio();
             SaveGame.toLoad = false;
             MapScene.player = new Player(MapScene.graphics, 0);
             Game.setScene("GameMap");
+            MapScene.playAudio();
         });
         enter.setOnMouseEntered(new ButtonHover(enter));
 
@@ -185,7 +188,7 @@ public class OpeningScene {
         saveVBox.setSpacing(50);
 
 
-        Button load = new Button("Load Game");
+        Button load = new Button("CONTINUE");
         load.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         load.setOnMouseEntered(new ButtonHover(load));
         load.setOnMouseClicked(l -> {
@@ -196,53 +199,74 @@ public class OpeningScene {
 
             GetFilePath.getFilePaths("assets/data/", saveFiles, saveNames);
 
-            for(int i = 1; i < (saveFiles.size() + 1); i++){
-                if(i == 1){
+
+            for(int i = 0; i < saveNames.size(); i++){
+                if(saveNames.get(i).equals("000.dat")){
                     save1.setOnMouseEntered(new ButtonHover(save1));
                     save1.setText("GAME 1");
+                    int finalI = i;
                     save1.setOnMouseClicked(s1 -> {
+                        AudioHandler.stopBackgroundAudio();
                         AudioHandler.playAudio("menuhit.wav");
-                        SaveGame.pathName = saveFiles.get(0);
+                        SaveGame.pathName = saveFiles.get(finalI);
                         SaveGame.toLoad = true;
                         MapScene.player = new Player(MapScene.graphics, 0);
+                        buttons.setVisible(true);
+                        title.setVisible(true);
+                        members.setVisible(true);
+                        saveVBox.setVisible(false);
+                        root.setCenter(buttons);
                         Game.setScene("GameMap");
+                        MapScene.playAudio();
 
                     });
                 }
-                if(i == 2){
+                if(saveNames.get(i).equals("001.dat")){
                     save2.setOnMouseEntered(new ButtonHover(save2));
                     save2.setText("GAME 2");
+                    int finalI1 = i;
                     save2.setOnMouseClicked(s2 -> {
+                        AudioHandler.stopBackgroundAudio();
                         AudioHandler.playAudio("menuhit.wav");
-                        SaveGame.pathName = saveFiles.get(1);
+                        SaveGame.pathName = saveFiles.get(finalI1);
                         SaveGame.toLoad = true;
                         MapScene.player = new Player(MapScene.graphics, 0);
+                        buttons.setVisible(true);
+                        title.setVisible(true);
+                        members.setVisible(true);
+                        saveVBox.setVisible(false);
+                        root.setCenter(buttons);
                         Game.setScene("GameMap");
+                        MapScene.playAudio();
 
                     });
                 }
-                if(i == 3){
+                if(saveNames.get(i).equals("002.dat")){
                     save3.setOnMouseEntered(new ButtonHover(save3));
                     save3.setText("GAME 3");
+                    int finalI2 = i;
                     save3.setOnMouseClicked(s3 -> {
+                        AudioHandler.stopBackgroundAudio();
                         AudioHandler.playAudio("menuhit.wav");
-                        SaveGame.pathName = saveFiles.get(2);
+                        SaveGame.pathName = saveFiles.get(finalI2);
                         SaveGame.toLoad = true;
                         MapScene.player = new Player(MapScene.graphics, 0);
+                        buttons.setVisible(true);
+                        title.setVisible(true);
+                        members.setVisible(true);
+                        saveVBox.setVisible(false);
+                        root.setCenter(buttons);
                         Game.setScene("GameMap");
-
+                        MapScene.playAudio();
                     });
                 }
 
             }
             saveVBox.setVisible(true);
-            root.setCenter(saveVBox );
-           /*AudioHandler.stopBackgroundAudio();
-            SaveGame.pathName = "assets/000.dat";*/
-
+            root.setCenter(saveVBox);
         });
 
-        Button settings = new Button("Settings");
+        Button settings = new Button("SETTINGS");
         settings.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         settings.setOnMouseEntered(new ButtonHover(settings));
         settings.setOnMouseClicked(s ->{
@@ -257,12 +281,47 @@ public class OpeningScene {
             root.setCenter(settingsBox);
         });
 
+        VBox cvb = new VBox();
+        cvb.setAlignment(Pos.CENTER);
+        Label l1 = new Label("Authors:");
+        Label l2 = new Label("Andrew McNeill, Thomas Racz");
+        Label l3 = new Label("Artwork: ");
+        Label l4 = new Label("Thomas Racz");
+        Label l5 = new Label("Music from Free Music Archive");
+
+        Button back3 = new Button("BACK");
+        back3.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        back3.setOnMouseEntered(new ButtonHover(back3));
+        back3.setOnMouseClicked(backEvent -> {
+            buttons.setVisible(true);
+            title.setVisible(true);
+            members.setVisible(true);
+            cvb.setVisible(false);
+            root.setCenter(buttons);
+        });
+
+        cvb.getChildren().addAll(l1, l2, l3, l4 ,l5, back3);
+        cvb.setSpacing(20);
+        Button credits = new Button("CREDITS");
+        credits.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        credits.setOnMouseEntered(new ButtonHover(credits));
+        credits.setOnMouseClicked(c ->{
+            AudioHandler.playAudio("menuhit.wav");
+            buttons.setVisible(false);
+            title.setVisible(false);
+            members.setVisible(false);
+            cvb.setVisible(true);
+            root.setCenter(cvb);
+        });
+
+
+
 
 
 
 
         settingsBox.getChildren().addAll(volLabel, volPlus, volMinus, back);
-        buttons.getChildren().addAll(enter, load, settings);
+        buttons.getChildren().addAll(enter, load, settings, credits);
 
         scene = new Scene(root, Game.WIDTH, Game.HEIGHT);
         scene.getStylesheets().add("styles/opening.css");

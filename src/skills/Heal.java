@@ -20,7 +20,6 @@ public class Heal extends Skill {
         } else {
             if(turnsSinceUsed > cooldown){
                 int restoreValue = Math.round(Math.abs(Player.maxHP/ 20) * MapScene.skills.get("Heal").level);
-                System.out.println(restoreValue);
                 Player.restoreHealth(restoreValue);
                 MapScene.notificationQueue.add("Healed " + restoreValue + " health");
                 AudioHandler.playAudio("heal.wav");

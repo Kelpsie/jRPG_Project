@@ -1,12 +1,16 @@
 package enemies;
 
 import HUD.MainHUD;
+import audio.AudioHandler;
 import javafx.scene.canvas.GraphicsContext;
+import main.Game;
 import models.Enemy;
 import models.Player;
+import scenes.GameOverScene;
 import scenes.MapScene;
 
 public class Boss extends Enemy {
+
 
     public Boss(int x, int y) {
         super("assets/Boss_1.png", 32, 10, x, y, 10000);
@@ -20,7 +24,15 @@ public class Boss extends Enemy {
         for (Enemy e : MapScene.enemies) {
             if (e instanceof Boss && e != this)
                 e.hp = hp;
+
         }
+        if(hp <= 0 ){
+            GameOverScene.isBossKill = true;
+            GameOverScene.setText();
+            Game.stage.setScene(MapScene.s.scene);
+            AudioHandler.stopBackgroundAudio();
+        }
+
     }
 
     void spawnPentagon(int type) {

@@ -40,7 +40,8 @@ public class MainHUD extends BorderPane {
     public static VBox BottomHUDVBox = new VBox();
 
     public static Label health = new Label("HP:" + Player.hp);
-    public static Label xp = new Label("XP: " + Player.xp);
+    public static Label xp = new Label("XP:" + Player.xp + "/" + (int) Player.xpToNextLevel);
+    public static Label level = new Label("Level:" + Player.level);
     static Label saveLabel = new Label("SAVE GAME");
 
     public static ToggleButton skill1 = new ToggleButton();
@@ -59,9 +60,8 @@ public class MainHUD extends BorderPane {
     private static VBox saveVBox = new VBox();
     private static HBox saveHBox = new HBox();
     private static HBox s1hbox = new HBox();
-    private static HBox s2hbox = new HBox();
-    private static HBox s3hbox = new HBox();
-    private static HBox s4hbox = new HBox();
+    private static VBox s1vbox = new VBox();
+    private static VBox s2vbox = new VBox();
     private static HBox menuBar = new HBox();
 
     private static Button back = new Button();
@@ -84,12 +84,16 @@ public class MainHUD extends BorderPane {
 
     public static void initHUD(){
 
-        health.setPrefSize(128, 32);
-        xp.setPrefSize(128, 32);
-        xp.getStyleClass().add("xpLabel");
-        xpBar.setFill(Color.GREEN);
+        health.setPrefSize(192, 21);
+        xp.setPrefSize(192, 21);
+        level.setPrefSize(192, 21);
+        xp.getStyleClass().add("HUDlabel");
+        level.getStyleClass().add("HUDlabel");
+        health.getStyleClass().add("HUDlabel");
+
+        xpBar.setFill(Color.YELLOW);
         xpBar.setWidth(0);
-        xpBar.setHeight(24);
+        xpBar.setHeight(16);
 
         s1Label.getStyleClass().add("Skill1Label");
         s2Label.getStyleClass().add("Skill2Label");
@@ -106,10 +110,11 @@ public class MainHUD extends BorderPane {
         s3Label.setPadding(new Insets(20,0,0,0));
         s4Label.setPadding(new Insets(20,0,0,0));
 
-        s1hbox.getChildren().addAll(s1Label, s1AddPoint);
-        s2hbox.getChildren().addAll(s2Label, s2AddPoint);
-        s3hbox.getChildren().addAll(s3Label, s3AddPoint);
-        s4hbox.getChildren().addAll(s4Label, s4AddPoint);
+        s1vbox.getChildren().addAll(s1Label, s2Label, s3Label, s4Label);
+        s1vbox.setSpacing(22);
+        s2vbox.getChildren().addAll(s1AddPoint, s2AddPoint, s3AddPoint, s4AddPoint);
+        s1hbox.getChildren().addAll(s1vbox, s2vbox);
+        s1hbox.setSpacing(20);
 
         s1AddPoint.setMinHeight(buttonSize);
         s1AddPoint.setMinWidth(buttonSize);
@@ -151,10 +156,9 @@ public class MainHUD extends BorderPane {
         s3AddPoint.setOnMouseClicked(event -> {
             if(Player.skillPoints > 0) {
                 MapScene.skills.get("Heal").level += 1;
-                System.out.println(MapScene.skills.get("Heal").level);
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s3Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
+                s3Label.setText("Restore Health: lvl " + MapScene.skills.get("Heal").level);
             }
         });
         s4AddPoint.setOnMouseClicked(event -> {
@@ -162,7 +166,7 @@ public class MainHUD extends BorderPane {
                 MapScene.skills.get("Blink").level += 1;
                 Player.skillPoints -= 1;
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
-                s4Label.setText("Blink lvl " + MapScene.skills.get("Blink").level);
+                s4Label.setText("Blink lvl: " + MapScene.skills.get("Blink").level);
             }
         });
 
@@ -200,6 +204,11 @@ public class MainHUD extends BorderPane {
 
         });
 
+        /*
+            this is like a wild forest where you cant find anything unless you have
+            a map, or in this case ctrl + f :joy::joy:
+         */
+
         game2.setOnMouseClicked(saveGame2Event ->{
             if(MapScene.enemies.size() > 0){
                 saveVBox.setVisible(false);
@@ -231,6 +240,8 @@ public class MainHUD extends BorderPane {
 
 
         menuBar.getChildren().addAll(back, saveGame);
+        menuBar.setSpacing(50);
+        menuBar.setPadding(new Insets(150, 0,0,0));
         saveHBox.getChildren().addAll(game1, game2, game3);
         saveHBox.setPadding(new Insets(100,0,0,0));
         saveHBox.setSpacing(50);
@@ -238,7 +249,7 @@ public class MainHUD extends BorderPane {
         saveVBox.getChildren().addAll(saveLabel, saveHBox);
         saveVBox.setAlignment(Pos.CENTER);
         saveVBox.setPadding(new Insets(0,0,300,0));
-        vSkillBox.getChildren().addAll(menuBar, skillPoints, s1hbox, s2hbox, s3hbox, s4hbox);
+        vSkillBox.getChildren().addAll(skillPoints, s1hbox, menuBar);
         vSkillBox.setPadding(new Insets(32));
         vSkillBox.setSpacing(16);
 
@@ -253,7 +264,7 @@ public class MainHUD extends BorderPane {
             Bottom HUD
          */
 
-        health.getStyleClass().add("health");
+
 
         skill1.setMinHeight(buttonSize);
         skill1.setMinWidth(buttonSize);
@@ -328,20 +339,21 @@ public class MainHUD extends BorderPane {
                 skillPoints.setText("Skill Points Avail: " + Player.skillPoints);
                 s1Label.setText("Ranged Attack: lvl " + MapScene.skills.get("Ranged Attack").level);
                 s2Label.setText("Melee Attack: lvl " + MapScene.skills.get("Melee Attack").level);
-                s3Label.setText("Restore Health lvl " + MapScene.skills.get("Heal").level);
-                s4Label.setText("Blink lvl " + MapScene.skills.get("Blink").level);
+                s3Label.setText("Restore Health: lvl " + MapScene.skills.get("Heal").level);
+                s4Label.setText("Blink lvl: " + MapScene.skills.get("Blink").level);
                 skillUpgrade.setVisible(true);
                 vSkillBox.setVisible(true);
                 skillUpgrade.setCenter(vSkillBox);
             } else {
                 skillUpgrade.setVisible(false);
+                root.requestFocus();;
             }
 
         });
 
         back.setOnMouseClicked(event -> skillUpgrade.setVisible(false));
 
-        bottomLabelVBox.getChildren().addAll(health, xp);
+        bottomLabelVBox.getChildren().addAll(health, level, xp);
 
         hb.getChildren().addAll(bottomLabelVBox, skill1, skill2, skill3, skill4, tree);
         hbLower.getChildren().add(xpBar);

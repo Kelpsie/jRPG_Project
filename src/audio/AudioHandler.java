@@ -25,7 +25,7 @@ public abstract class AudioHandler {
     public static ArrayList<AudioClip> audioPlayer = new ArrayList<>();
     public static HashMap<String, AudioClip> audioList = new HashMap();
 
-    public static double volume = 0.1;
+    public static double volume = 0.0;
 
 
     public static void playAudio(String name){
@@ -40,6 +40,8 @@ public abstract class AudioHandler {
 
     public static void playBackgroundAudio(String name){
         Game.bgAudio = new MediaPlayer(new Media(new File("assets/audio/" + name).toURI().toString()));
+        Game.bgAudio.setCycleCount(MediaPlayer.INDEFINITE);
+        Game.bgAudio.setVolume(volume);
         Game.bgAudio.play();
     }
 
