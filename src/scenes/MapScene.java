@@ -238,9 +238,17 @@ public class MapScene extends GameScene {
         root.getChildren().addAll(MainHUD.BottomHUDVBox);
         root.getChildren().add(MainHUD.skillUpgrade);
 
-        //setPickOnBounds() removes the panes ability to detect events, only nodes
-        //on the pane can listen to events, used to prevent pane interference
+        /*
+        https://docs.oracle.com/javafx/2/api/javafx/scene/Node.html#setPickOnBounds(boolean)
+        Defines how the picking computation is done for this node when triggered by
+        a MouseEvent or a contains function call. If pickOnBounds is true, then picking
+        is computed by intersecting with the bounds of this node, else picking is
+        computed by intersecting with the geometric shape of this node.*/
         MainHUD.BottomHUDVBox.setPickOnBounds(false);
+
+        /*request.focus() focuses the canvas so that the player does not have to
+        click twice to start moving around*/
+
         canvas.requestFocus();
         graphics = canvas.getGraphicsContext2D();
 
