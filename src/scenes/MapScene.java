@@ -263,7 +263,7 @@ public class MapScene extends GameScene {
         notificationQueue = new LinkedList<>();
         notificationLabels = new LinkedList<>();
         Timeline doNotes = new Timeline(new KeyFrame(Duration.millis(250), e -> {
-            if (notificationQueue.size() > 0 && notificationQueue.size() < 10){
+            if (notificationQueue.size() > 0 && notificationQueue.size() < 5){
                 addNotification(notificationQueue.pop());
             } else {
                 // dump notifications if it becomes overwhelmed

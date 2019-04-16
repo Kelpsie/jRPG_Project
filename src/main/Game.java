@@ -37,7 +37,7 @@ public class Game extends Application {
         Font.loadFont(getClass().getResourceAsStream("/styles/PressStart2P-Regular.ttf"), 16);
 
         stage = primaryStage;
-        stage.setTitle("The Name Of Our Game, I Guess");
+        stage.setTitle("Untitled RPG");
 
         gameLoop = new GameLoop();
 

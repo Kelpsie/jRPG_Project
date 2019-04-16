@@ -1,5 +1,6 @@
 package loader;
 
+import HUD.MainHUD;
 import main.Game;
 import models.Player;
 import scenes.MapScene;
@@ -109,6 +110,7 @@ public class SaveGame {
                 MapScene.skills.get("Blink").level = ReadData.get(10);
 
                 //place the player on the map AFTER loading in the player position data
+                MainHUD.level.setText("Level:" + Player.level);
                 positionPlayer();
                 ReadData.clear(); //clear data once loaded
             } catch(Exception e ) {

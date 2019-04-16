@@ -14,7 +14,7 @@ public class Boss extends Enemy {
 
     public Boss(int x, int y) {
         super("assets/Boss_1.png", 32, 10, x, y, 10000);
-        hp = 100;
+        hp = 3000;
         damage = 60;
     }
 
@@ -54,7 +54,7 @@ public class Boss extends Enemy {
     @Override
     public void act() {
         // There are 9. 9 bosses acting at once would be craziness.
-        if (MapScene.random.nextInt(12) != 0)
+        if (MapScene.random.nextInt(6) != 0)
             return;
 
         switch (MapScene.random.nextInt(10)) {

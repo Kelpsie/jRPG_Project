@@ -25,7 +25,7 @@ public abstract class AudioHandler {
     public static ArrayList<AudioClip> audioPlayer = new ArrayList<>();
     public static HashMap<String, AudioClip> audioList = new HashMap();
 
-    public static double volume = 0.0;
+    public static double volume = 0.5;
 
 
     public static void playAudio(String name){
